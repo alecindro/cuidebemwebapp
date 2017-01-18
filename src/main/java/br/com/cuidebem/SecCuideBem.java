@@ -8,9 +8,8 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.annotation.WebFilter;
 
-@WebFilter(filterName="SecCuideBem", urlPatterns = {"/*"})
+
 public class SecCuideBem implements Filter {
 
 	public void destroy() {
