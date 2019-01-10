@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd" id="WebApp_ID" version="3.1">
+  <display-name>cuidebemhtml</display-name>
+ 
+  <servlet>
+    <servlet-name>Faces Servlet</servlet-name>
+    <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Faces Servlet</servlet-name>
+    <url-pattern>*.xhtml</url-pattern>
+  </servlet-mapping>
+  <context-param>
+		<param-name>version</param-name>
+		<param-value>2017.0.0.1.a</param-value>
+	</context-param>
+	<context-param>
+		<param-name>softwareName</param-name>
+		<param-value>CuideBemAPP</param-value>
+	</context-param>
+	<context-param>
+		<param-name>proprietary</param-name>
+		<param-value>CuideBem</param-value>
+	</context-param>
+	<context-param>
+		<param-name>messageLogin</param-name>
+		<param-value>Todos os direitos reservados - </param-value>
+	</context-param>
+	<context-param>
+		<param-name>year</param-name>
+		<param-value>2017</param-value>
+	</context-param>
+	<context-param>
+		<param-name>support</param-name>
+		<param-value>55 48 99999-9999</param-value>
+	</context-param>
+  
+  <context-param>
+    <description>State saving method: 'client' or 'server' (=default). See JSF Specification 2.5.2</description>
+    <param-name>javax.faces.STATE_SAVING_METHOD</param-name>
+    <param-value>client</param-value>
+  </context-param>
+  <context-param>
+    <param-name>javax.servlet.jsp.jstl.fmt.localizationContext</param-name>
+    <param-value>resources.application</param-value>
+  </context-param>
+<filter>
+		<filter-name>SecurityFilter</filter-name>
+		<filter-class>org.apache.shiro.web.servlet.IniShiroFilter</filter-class>
+
+	</filter>
+
+	<filter-mapping>
+		<filter-name>SecurityFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+		<dispatcher>REQUEST</dispatcher>
+		<dispatcher>FORWARD</dispatcher>
+		<dispatcher>INCLUDE</dispatcher>
+		<dispatcher>ERROR</dispatcher>
+	</filter-mapping>
+
+   
+  <resource-ref>
+    <description>DB Connection</description>
+    <res-ref-name>jdbc/cuidebem</res-ref-name>
+    <res-type>javax.sql.DataSource</res-type>
+    <res-auth>Container</res-auth>
+  </resource-ref>
+  <welcome-file-list>
+  <welcome-file>/app/index.xhtml</welcome-file>
+  </welcome-file-list>
+</web-app>
