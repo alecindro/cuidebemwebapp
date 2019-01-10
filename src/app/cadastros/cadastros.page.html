@@ -1,0 +1,25 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Cadastros</ion-title>
+    <ion-buttons slot="end">
+      <ion-menu-button></ion-menu-button>
+</ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding color="light">
+    <ion-grid fixed="true">
+        <ion-row >
+          <ion-col ><ion-button color="primary" strong="true" expand="block" (click)='pacientes()'>Pacientes</ion-button></ion-col>
+        </ion-row>
+        <ion-row>
+            <ion-col><ion-button color="primary" strong="true"  expand="block" (click)='responsaveis()'>Responsáveis</ion-button></ion-col>
+          </ion-row>
+          <ion-row>
+              <ion-col><ion-button color="primary"  strong="true" expand="block" (click)='agendas()'>Agendas</ion-button></ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col><ion-button color="primary" strong="true" expand="block" (click)='usuarios()'>Usuários</ion-button></ion-col>
+              </ion-row>
+      </ion-grid>
+</ion-content>

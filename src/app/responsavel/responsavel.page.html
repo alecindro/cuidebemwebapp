@@ -1,0 +1,67 @@
+<ion-header>
+    <ion-toolbar color="primary">
+      <ion-title>Responsavel</ion-title>
+      <ion-buttons slot="end">
+        <ion-menu-button></ion-menu-button>
+  </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+
+    <ion-content padding class="form-content">
+        <input type="file" (change)="atualizaArquivo($event)" id="file" hidden />
+        <form #pacienteForm="ngForm" (ngSubmit)="save()" class="form">
+          <ion-grid>
+            <ion-row>
+              <ion-col text-center>
+                <div (click)="loadPhoto()" style="cursor: pointer">
+                  <ion-img [src]="photo" name="photo"></ion-img>
+                </div>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col>
+                <ion-item>
+                  <ion-label position="floating" class="required">Nome</ion-label>
+                  <ion-input type="text" [(ngModel)]="responsavelPaciente.responsavel.nome" name="nome" required></ion-input>
+                </ion-item>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col>
+                <ion-item>
+                  <ion-label position="floating">Apelido</ion-label>
+                  <ion-input type="text" [(ngModel)]="responsavelPaciente.responsavel.apelido" name="apelido"></ion-input>
+                </ion-item>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col>
+                <ion-label position="floating" color="primary">Data de Nascimento</ion-label>
+                <ion-datetime display-format="DD/MM/YYYY" [(ngModel)]="responsavelPaciente.responsavel.datanascimento" name="datanascimento"></ion-datetime>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col>
+                <ion-item-group>
+                  <ion-item-divider color="primary">
+                    <ion-title>Gênero</ion-title>
+                  </ion-item-divider>
+                  <ion-item>
+                    <ion-label>Masculino</ion-label>
+                    <ion-checkbox slot="end" [(ngModel)]="masculino" [checked]="masculino" name="check1" (ionChange)="changeMasculino()"></ion-checkbox>
+                  </ion-item>
+                  <ion-item>
+                    <ion-label>Feminino</ion-label>
+                    <ion-checkbox slot="end" [(ngModel)]="feminino" [checked]="feminino" name="check" (ionChange)="changeFeminino()"></ion-checkbox>
+                  </ion-item>
+                </ion-item-group>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col>
+                <ion-button color="primary" strong="true" expand="block" type="submit" [disabled]="!pacienteForm.form.valid">Salvar</ion-button>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </form>
+</ion-content>

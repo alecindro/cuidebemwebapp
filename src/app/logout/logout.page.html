@@ -1,0 +1,20 @@
+<ion-header>
+  <ion-toolbar color="primary">
+      <ion-buttons slot="end">
+          <ion-menu-button></ion-menu-button>
+       </ion-buttons>
+    <ion-title>Sair</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-grid>
+    <ion-row>
+<ion-col><h2>Deseja realmente sair?</h2></ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col><ion-button color="primary" expand="block" (click)="cancel()">Cancelar</ion-button></ion-col>
+      <ion-col><ion-button color="danger" expand="block" (click)="logout()">Sair</ion-button></ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

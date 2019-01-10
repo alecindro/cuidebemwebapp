@@ -1,0 +1,45 @@
+<ion-header>
+    <ion-toolbar color="primary">
+        <ion-title>Cadastro de Pacientes</ion-title>
+      <ion-buttons slot="end">
+          <ion-button (click)="showSearch()">
+              <ion-icon name="search" slot="icon-only"> </ion-icon>
+            </ion-button>
+        <ion-menu-button></ion-menu-button>
+  </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+
+<ion-content padding>
+    <div *ngIf="enableSearch">
+        <ion-searchbar [(ngModel)]="searchText" (ionChange)="search()"></ion-searchbar>
+      </div>
+    <ion-grid no-padding fixed>
+        <ion-row *ngIf="filteredList.length == 0">
+          <div>
+            <ion-label>Não existem pacientes cadastrados</ion-label>
+          </div>
+          </ion-row>
+      <ion-row *ngFor="let pacientedto of filteredList" (click)="editPaciente(pacientedto)">
+        <ion-col size="3">
+          <div>
+            <ion-avatar item-start>
+              <img [src]="pacientedto.photo">
+            </ion-avatar>
+          </div>
+        </ion-col>
+        <ion-col size="7">
+          <div>
+            <ion-label>
+              <h2>{{pacientedto.paciente.apelido || pacientedto.paciente.nome}}</h2>
+            </ion-label>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+      <ion-fab-button (click)="newPaciente()">
+        <ion-icon name="add"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
+</ion-content>

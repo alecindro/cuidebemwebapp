@@ -1,0 +1,28 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title *ngIf="!pacienteDTO.checkin">Checkin</ion-title>
+    <ion-title *ngIf="pacienteDTO.checkin">Checkout</ion-title>
+   <ion-buttons slot="end">
+        <ion-button (click)="cancelar()">
+          <span ion-text color="primary">Cancelar</span>
+          <ion-icon name="md-close" showWhen="android,windows"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-list>
+    <ion-item (click)="check()">
+      <ion-avatar item-start>
+        <img [src]="pacienteDTO.photo">
+      </ion-avatar>
+      <ion-label item-content>
+      <h2>{{pacienteDTO.paciente.apelido || pacienteDTO.paciente.nome}}</h2>
+    </ion-label>
+      <ion-button item-end color="primary" *ngIf="!pacienteDTO.checkin">Checkin</ion-button>
+      <ion-button item-end color="primary" *ngIf="pacienteDTO.checkin">Checkout</ion-button>
+   </ion-item>
+</ion-list>
+
+</ion-content>
