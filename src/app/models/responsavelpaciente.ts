@@ -2,7 +2,8 @@ import { Paciente } from "./paciente";
 import { Responsavel } from "./responsavel";
 
 export class ResponsavelPaciente{
+
     idresponsavelPaciente: number;
-    paciente: Paciente;
-    responsavel: Responsavel;
+    paciente: Paciente = new Paciente();
+    responsavel: Responsavel = new Responsavel();
 }

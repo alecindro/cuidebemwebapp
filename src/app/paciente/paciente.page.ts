@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Platform, NavController, LoadingController } from '@ionic/angular';
+import { Platform, NavController, LoadingController, AlertController } from '@ionic/angular';
 import { PacienteDTO } from 'src/app/models/pacienteDTO';
 import { PacientedtoService } from 'src/app/services/pacientedto-service';
 import { Patologias } from 'src/app/models/patologias';
@@ -29,7 +29,8 @@ export class PacientePage implements OnInit {
     private loadingController: LoadingController,
     private camera: Camera,
     private nav : NavController,
-    private platform: Platform
+    private platform: Platform,
+    private alertController: AlertController
     ) {
     this.mobile = false;
     if (this.platform.is('ios') || this.platform.is('android')) {
@@ -102,13 +103,12 @@ export class PacientePage implements OnInit {
       this.pacienteDTO.paciente.genero = this.masculino;
     }
     const loading = await this.loadingController.create({
-      message: 'Carregando ...'
+      message: 'Salvando ...'
     });
     this.pacienteDTO.patologiasDTO = this.patologiaPacienteDTOs;
     await loading.present();
     await this.pacientedtoService.save(this.pacienteDTO).subscribe(res => {
       this.pacienteDTO = res.body;
-      this.pacientedtoService.pacienteDTO = this.pacienteDTO;
       loading.dismiss();
       this.router.navigate(['/pacientes'],{ relativeTo: this.route });
     }, err => {
@@ -123,6 +123,35 @@ export class PacientePage implements OnInit {
   }
   changeFeminino() {
     this.masculino = !this.feminino;
+  }
+
+  async delete(){
+    const alert = await this.alertController.create({
+      header: 'Excluir',
+      message: '<strong>Tem certeza?</strong>',
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: (blah) => {
+            console.log('Confirm Cancel: blah');
+          }
+        }, {
+          text: 'Confimar',
+          handler: () => {
+            this.pacientedtoService.delete(this.pacienteDTO.paciente.idpaciente).subscribe(res => {
+              this.router.navigate(['pacientes']);
+            }, err => {
+              console.log(err);
+            });
+            console.log('Confirm Okay');
+          }
+        }
+      ]
+    });
+    await alert.present();
+    
   }
 
 }

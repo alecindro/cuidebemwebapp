@@ -16,6 +16,13 @@ export class ResponsavelPacienteService {
     getByPaciente(idpaciente: number): Observable<HttpResponse<any>> {
         return this.api.get("api/responsavelpacientes/"+idpaciente);
     }
+    getByPacienteAndResponsavel(idpaciente: number, idresponsavel: number): Observable<HttpResponse<any>> {
+        let params = {
+            'idpaciente':idpaciente,
+            'idresponsavel':idresponsavel
+        };
+        return this.api.get("api/responsavelpacientes",params);
+    }
 
     save(responsavelPaciente: ResponsavelPaciente): Observable<HttpResponse<any>> {
         if (responsavelPaciente.idresponsavelPaciente) {

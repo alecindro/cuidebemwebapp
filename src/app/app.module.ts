@@ -17,6 +17,8 @@ import { MenuItemComponent } from './components/menu-item/menu-item.component';
 import { Camera } from '@ionic-native/camera/ngx';
 import { File } from '@ionic-native/file/ngx';
 import { WebView } from '@ionic-native/ionic-webview/ngx';
+import { ModalTelefonePageModule } from './modal-telefone/modal-telefone.module';
+import { FormsModule } from '@angular/forms';
 
 export function jwtOptionsFactory(storage: Storage) {
   return {
@@ -28,7 +30,7 @@ export function jwtOptionsFactory(storage: Storage) {
 @NgModule({
   declarations: [AppComponent, MenuItemComponent],
   entryComponents: [],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, IonicStorageModule.forRoot(),HttpClientModule],
+  imports: [BrowserModule, FormsModule,  IonicModule.forRoot(), AppRoutingModule, IonicStorageModule.forRoot(),HttpClientModule,ModalTelefonePageModule],
   providers: [
     Camera,
     File,

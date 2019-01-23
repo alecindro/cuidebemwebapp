@@ -1,0 +1,23 @@
+.avatar {
+    /* ... */
+    width: 330px;
+    height: 330px;
+  }
+  
+  /* Mobile Landscape */
+  @media only screen and (min-width: 480px) and (max-width: 767px) {
+    .avatar {
+      /* ... */
+      width: 210px;
+      height: 295px;
+    }
+  }
+  
+  /* Mobile portrait */
+  @media only screen and (max-width: 479px) {
+    .avatar {
+      /* ... */
+      width: 90px;
+      height: 125px;
+    }
+  }

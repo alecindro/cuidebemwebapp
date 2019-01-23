@@ -35,6 +35,8 @@ save(pacienteDTO:PacienteDTO): Observable<HttpResponse<any>>{
 update(pacienteDTO:PacienteDTO): Observable<HttpResponse<any>>{
   return this.api.put("api/pacientes",pacienteDTO);
 }
-
+delete(idpaciente:number): Observable<HttpResponse<any>>{
+   return this.api.delete("api/pacientes/"+idpaciente);
+}
 
 }

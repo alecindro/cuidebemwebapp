@@ -52,7 +52,6 @@ export class PacientesPage implements OnInit {
   }
 
   editPaciente(pacientedto){
-    console.log(pacientedto);
     this.pacientedtoService.pacienteDTO = pacientedto;
     this.router.navigate(['paciente']);
   }

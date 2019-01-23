@@ -9,12 +9,10 @@ import { Router } from '@angular/router';
 export class ConfiguracoesPage implements OnInit {
 
   constructor(private route: Router) { 
-    console.log("const config");
   }
 
   ngOnInit() {
-    console.log("init config");
-  }
+   }
 
   alterarSenha(){
     this.route.navigate(['senha']);
@@ -25,7 +23,6 @@ export class ConfiguracoesPage implements OnInit {
   }
 
   ionViewWillEnter(){
-    console.log("ionView config");
   }
 
 }

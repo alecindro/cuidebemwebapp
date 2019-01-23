@@ -1,12 +1,45 @@
 <ion-header>
     <ion-toolbar color="primary">
+        <ion-buttons slot="start">
+            <ion-back-button></ion-back-button>
+          </ion-buttons>
       <ion-title>Cuidador</ion-title>
       <ion-buttons slot="end">
+          <ion-button (click)="showSearch()">
+              <ion-icon name="search" slot="icon-only"> </ion-icon>
+            </ion-button>
         <ion-menu-button></ion-menu-button>
-  </ion-buttons>
+      </ion-buttons>
+      
     </ion-toolbar>
   </ion-header>
 
 <ion-content padding>
-Em construção
+    <div *ngIf="enableSearch">
+        <ion-searchbar [(ngModel)]="searchText" (ionChange)="search()"></ion-searchbar>
+      </div>
+    <ion-grid no-padding fixed>
+          <ion-row *ngFor="let usuarioPhoto of filteredList" (click)="editUsuario(usuarioPhoto)">
+            <ion-col size="3">
+              <div>
+                <ion-avatar item-start>
+                  <img [src]="usuarioPhoto.photo" *ngIf="usuarioPhoto.photo">
+                  <img src="../../assets/imgs/rsz_1no-avatar.jpg" *ngIf="!usuarioPhoto.photo">
+                </ion-avatar>
+              </div>
+            </ion-col>
+            <ion-col size="7">
+              <div>
+                <ion-label>
+                  <h2>{{usuarioPhoto.usuario.apelido || usuarioPhoto.usuario.nome}}</h2>
+                </ion-label>
+              </div>
+            </ion-col>
+          </ion-row>
+      </ion-grid>
+      <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+          <ion-fab-button (click)="newUsuario()">
+            <ion-icon name="add"></ion-icon>
+          </ion-fab-button>
+        </ion-fab>
 </ion-content>

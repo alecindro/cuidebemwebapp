@@ -1,5 +1,8 @@
 <ion-header>
   <ion-toolbar color="primary">
+      <ion-buttons slot="start">
+          <ion-back-button></ion-back-button>
+        </ion-buttons>
     <ion-title>Responsáveis</ion-title>
     <ion-buttons slot="end">
       <ion-menu-button></ion-menu-button>
@@ -18,63 +21,41 @@
     </ion-row>
     <ion-row>
       <ion-col>
-        <ion-label>Selecione o Paciente</ion-label>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col>
         <ion-item>
-          <ion-select [interfaceOptions]="customAlertOptions" interface="alert" placeholder="Paciente" [(ngModel)]="idpaciente"
+          <ion-select [interfaceOptions]="customAlertOptions" interface="alert" placeholder="Selecione o Paciente" [(ngModel)]="paciente"
             (ionChange)="changePaciente()">
-            <ion-select-option *ngFor="let pacientedto of pacienteDTOS" [value]="pacientedto.paciente.idpaciente">{{pacientedto.paciente.nome}}</ion-select-option>
+            <ion-select-option *ngFor="let pacientedto of pacienteDTOS" [value]="pacientedto.paciente">{{pacientedto.paciente.nome}}</ion-select-option>
           </ion-select>
         </ion-item>
       </ion-col>
     </ion-row>
-  </ion-grid>
+     </ion-grid>
   <div *ngIf="selectedPaciente">
   <ion-grid no-padding fixed>
-    <ion-row>
-      <ion-col>
-          Nome
-      </ion-col>
-        <ion-col>
-          Email
-        </ion-col>
-        <ion-col>
-        Data Nascimento
-      </ion-col>
-    <ion-col>
-          vinculo
-        </ion-col>
-        <ion-col>
-          Principal
-      </ion-col>
-    </ion-row>
-    <ion-row *ngIf="responsavelPacientes.length == 0">
+
+    <ion-row *ngIf="responsaveis.length == 0">
         <ion-col>
             <div>
                 <ion-label>Não existem responsáveis cadastrados</ion-label>
               </div>
         </ion-col>
       </ion-row>
-      <ion-row *ngFor="let responsavelPaciente of responsavelPacientes" (click)="editResponsavel(responsavelPaciente)">
-          <ion-col>
-              {{responsavelPaciente.responsavel.nome}}
-          </ion-col>
-            <ion-col>
-                {{responsavelPaciente.responsavel.email}}
-            </ion-col>
-            <ion-col>
-                {{responsavelPaciente.responsavel.datanascimento}}
-          </ion-col>
-        <ion-col>
-            {{responsavelPaciente.responsavel.vinculo}}
-            </ion-col>
-            <ion-col>
-                {{responsavelPaciente.responsavel.tpresponsavel}}
-          </ion-col>
-        
+      <ion-row *ngFor="let responsavel of responsaveis" (click)="editResponsavel(responsavel)">
+        <ion-col size="3">
+          <div>
+            <ion-avatar item-start>
+              <img [src]="responsavel.responsavelPhoto.photo" *ngIf="responsavel.responsavelPhoto">
+              <img src="../../assets/imgs/rsz_1no-avatar.jpg" *ngIf="!responsavel.responsavelPhoto">
+            </ion-avatar>
+          </div>
+        </ion-col>
+        <ion-col size="7">
+          <div>
+            <ion-label>
+              <h2>{{responsavel.apelido || responsavel.nome}}</h2>
+            </ion-label>
+          </div>
+        </ion-col>
       </ion-row>
   </ion-grid>
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">

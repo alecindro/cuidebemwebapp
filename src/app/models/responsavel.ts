@@ -1,7 +1,7 @@
-import { ResponsavelPaciente } from "./responsavelpaciente";
 import { ResponsavelPhoto } from "./responsavelphoto";
 import { ResponsavelTelefone } from "./responsaveltelefone";
 import { Schedulemail } from "./schedulemail";
+import { ResponsavelPaciente } from "./responsavelpaciente";
 
 export class Responsavel{
  
@@ -20,9 +20,9 @@ export class Responsavel{
 	estado: string;
 	genero: boolean;
 	cep: string;
-	responsavelPacientes: Array<ResponsavelPaciente>;
-	responsavelPhoto:  ResponsavelPhoto;
-	responsavelTelefones: Array<ResponsavelTelefone>;
+	responsavelPacientes: Array<ResponsavelPaciente> = [];
+	responsavelPhoto:  ResponsavelPhoto = new ResponsavelPhoto();
+	responsavelTelefones: Array<ResponsavelTelefone> = [];
 	 schedulemails: Array<Schedulemail> ;
 
 }

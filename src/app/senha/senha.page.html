@@ -1,13 +1,80 @@
 <ion-header>
-    <ion-toolbar color="primary">
-      <ion-title>Alterar Senha</ion-title>
-      <ion-buttons slot="end">
-        <ion-menu-button></ion-menu-button>
-  </ion-buttons>
-    </ion-toolbar>
-  </ion-header>
+  <ion-toolbar color="primary">
+      <ion-buttons slot="start">
+          <ion-back-button></ion-back-button>
+        </ion-buttons>
+    <ion-title>Alterar Senha</ion-title>
+    <ion-buttons slot="end">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
 
-<ion-content padding>
-<ion-button (click)="config()">Config</ion-button>
-<a routerLink="/configuracoes">teste</a>
+<ion-content padding class="form-content">
+  <form #senhaForm="ngForm" (ngSubmit)="save()" class="form">
+    <ion-grid>
+      <ion-row>
+        <ion-col size="10">
+          <ion-label position="floating" class="required">Senha atual</ion-label>
+          <ion-input [type]="type" [(ngModel)]="passwordChangeDTO.currentPassword" name="currentPassword" minlenght="4"
+            #currentPassword="ngModel" required></ion-input>
+          <div *ngIf="currentPassword.invalid && (currentPassword.dirty || currentPassword.touched)" class="required">
+            <div *ngIf="currentPassword.errors.required">
+              Senha atual é obrigatório.
+            </div>
+            <div *ngIf="currentPassword.errors.minlength">
+              Mínimo de 4 caracteres.
+            </div>
+          </div>
+        </ion-col>
+        <ion-col size="2">
+            <ion-button (mousedown)="mousedown()" (mouseup)="mouseup()">
+                <ion-icon slot="icon-only" name="eye"></ion-icon>
+              </ion-button>
+    
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="10">
+          <ion-label position="floating" class="required">Nova senha</ion-label>
+          <ion-input [type]="type" [(ngModel)]="passwordChangeDTO.newPassword" name="newPassword" #newPassword="ngModel"
+            minlenght="4" required></ion-input>
+          <div *ngIf="newPassword.invalid && (newPassword.dirty || newPassword.touched)" class="required">
+            <div *ngIf="newPassword.errors.required">
+              Nova senha é obrigatório.
+            </div>
+            <div *ngIf="newPassword.errors.minlength">
+              Mínimo de 4 caracteres.
+            </div>
+          </div>
+        </ion-col>
+        <ion-col size="2">
+            <ion-button (mousedown)="mousedown()" (mouseup)="mouseup()">
+                <ion-icon slot="icon-only" name="eye"></ion-icon>
+              </ion-button>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="10">
+          <ion-label position="floating" class="required">Repita nova senha</ion-label>
+          <ion-input [type]="type" [(ngModel)]="repitaSenha" name="repitaSenha" minlenght="4" required></ion-input>
+          <div *ngIf="!senhaValidate">
+              As senhas não são iguais.
+            </div>
+        </ion-col>
+        <ion-col size="2">
+            <ion-button (mousedown)="mousedown()" (mouseup)="mouseup()">
+                <ion-icon slot="icon-only" name="eye"></ion-icon>
+              </ion-button>
+        </ion-col>
+      </ion-row>
+      
+      <ion-row>
+          <ion-col>
+            <ion-button color="primary" strong="true" expand="block" type="submit" [disabled]="!senhaForm.form.valid">Salvar</ion-button>
+          </ion-col>
+        </ion-row>
+    </ion-grid>
+  </form>
+
 </ion-content>

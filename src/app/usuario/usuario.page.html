@@ -1,5 +1,8 @@
 <ion-header>
     <ion-toolbar color="primary">
+        <ion-buttons slot="start">
+            <ion-back-button></ion-back-button>
+          </ion-buttons>
       <ion-title>Meus Dados</ion-title>
       <ion-buttons slot="end">
         <ion-menu-button></ion-menu-button>
@@ -8,5 +11,140 @@
   </ion-header>
 
 <ion-content padding>
-Em construção
+    <input type="file" (change)="atualizaArquivo($event)" id="file" hidden />
+    <form #usuarioForm="ngForm" (ngSubmit)=save()>
+      <ion-grid>
+        <ion-row text-center>
+          <ion-col >
+            <div (click)="loadPhoto()" style="cursor: pointer">
+              <ion-img [src]="usuarioPhoto.photo" name="photo" *ngIf="usuarioPhoto.photo" class="avatar"></ion-img>
+              <ion-img src="../../assets/imgs/rsz_1no-avatar.jpg" name="photo" class="avatar" *ngIf="!usuarioPhoto.photo"></ion-img>
+            </div>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-item>
+              <ion-label position="floating" class="required">Nome</ion-label>
+              <ion-input type="text" [(ngModel)]="usuario.nome" name="nome" #nome="ngModel"
+                required></ion-input>
+              <div *ngIf="nome.invalid && (nome.dirty || nome.touched)" class="required">
+                <div *ngIf="nome.errors.required">
+                  Nome é obrigatório.
+                </div>
+              </div>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-item>
+              <ion-label position="floating">Email</ion-label>
+              <ion-input type="email" [(ngModel)]="usuario.email" name="email"></ion-input>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+            <ion-col>
+              <ion-item>
+                <ion-label position="floating">Apelido</ion-label>
+                <ion-input type="text" [(ngModel)]="usuario.apelido" name="apelido"></ion-input>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-label position="floating" color="primary">Data de Nascimento</ion-label>
+            <ion-datetime display-format="DD/MM/YYYY" [(ngModel)]="usuario.datanascimento" name="datanascimento"></ion-datetime>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-item-group>
+              <ion-item-divider color="primary">
+                <ion-title>Gênero</ion-title>
+              </ion-item-divider>
+              <ion-item>
+                <ion-label>Masculino</ion-label>
+                <ion-checkbox slot="end" [(ngModel)]="masculino" [checked]="masculino" name="check1" (ionChange)="changeMasculino()"></ion-checkbox>
+              </ion-item>
+              <ion-item>
+                <ion-label>Feminino</ion-label>
+                <ion-checkbox slot="end" [(ngModel)]="feminino" [checked]="feminino" name="check" (ionChange)="changeFeminino()"></ion-checkbox>
+              </ion-item>
+            </ion-item-group>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    
+      <ion-grid>
+        <ion-row align-items-center>
+          <ion-col size="2">
+            <ion-label position="floating">DDD</ion-label>
+            <ion-input type="number" minlength="2" [(ngModel)]="telefone.ddd" name="ddd" #ddd="ngModel" required></ion-input>
+            <div *ngIf="ddd.invalid && (ddd.dirty || ddd.touched)" class="required">
+              <div *ngIf="ddd.errors.required">
+                DDD é obrigatório.
+              </div>
+              <div *ngIf="ddd.errors.minlength">
+                Mínimo de 2 caracteres.
+              </div>
+  
+            </div>
+          </ion-col>
+          <ion-col>
+            <ion-label position="floating">Telefone</ion-label>
+            <ion-input type="number" [(ngModel)]="telefone.telefone" name="telefone" #telefone="ngModel" required></ion-input>
+            <div *ngIf="telefone.invalid && (telefone.dirty || telefone.touched)" class="required">
+              <div *ngIf="telefone.errors.required">
+                Telefone é obrigatório.
+              </div>
+            </div>
+          </ion-col>
+          <ion-col size="2">
+            <ion-button fill="clear" size="large" [disabled]="!telefone.valid || !ddd.valid" (click)="addTelefone(telefone)">
+              <ion-icon name="add-circle"></ion-icon>
+            </ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    
+    <ion-grid>
+      <ion-row>
+        <ion-col size="2">
+          DDD
+        </ion-col>
+        <ion-col>
+          Telefone
+        </ion-col>
+        <ion-col size="2">
+          
+        </ion-col>
+      </ion-row>
+      <ion-row *ngIf="usuarioTelefones.length == 0">
+        <ion-col>
+          Não existe telefones cadastrados
+        </ion-col>
+      </ion-row>
+      <ion-row *ngFor="let usuarioTelefone of usuarioTelefones" align-items-center>
+        <ion-col size="2">
+          {{usuarioTelefone.telefone.ddd}}
+        </ion-col>
+        <ion-col>
+          {{usuarioTelefone.telefone.telefone}}
+        </ion-col>
+  
+        <ion-col size="2">
+          <ion-button (click)="delTelefone(usuarioTelefone)" size="large"  fill="clear">
+            <ion-icon name="trash"></ion-icon>
+          </ion-button>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-button color="primary" strong="true" expand="block" type="submit" [disabled]="!nome.valid">Salvar</ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    </form>
 </ion-content>

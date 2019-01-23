@@ -23,10 +23,16 @@ export class AuthServerProvider {
     ) {
     }
 
+    user():Promise<string>{
+        return this.storage.get(TOKEN_KEY).then(jwt => {
+            return this.jwtHelper.decodeToken(jwt).sub;
+        });
+    }
+
     checkLogin() {
         this.storage.get(TOKEN_KEY).then(jwt => {
             if (jwt && !this.jwtHelper.isTokenExpired(jwt)) {
-                this.api.get('api/authenticate')
+                this.api.get('sec/authenticate')
                     .subscribe((text) => this.authUser.next(jwt),
                         (err) => this.storage.remove(TOKEN_KEY).then(() => this.authUser.next(null)));
                 // OR
@@ -39,7 +45,7 @@ export class AuthServerProvider {
     }
 
     login(values: any): Observable<any> {
-        return this.api.post('api/authenticate', values)
+        return this.api.post('sec/authenticate', values)
             .pipe(tap(response => {
                 this.handleJwtResponse(response.body.id_token);
                 this.router.navigate(['home']);
@@ -65,10 +71,15 @@ export class AuthServerProvider {
     }
 
     private handleJwtResponse(jwt: string) {
-        console.log(this.jwtHelper.decodeToken(jwt));
         return this.storage.set(TOKEN_KEY, jwt)
             .then(() => this.authUser.next(jwt))
             .then(() => jwt);
+    }
+
+    getTenantNow():Promise<string>{
+        return this.storage.get(TOKEN_KEY).then(jwt => {
+            return this.tenant(jwt);
+        });
     }
 
     tenant(token: any) {
