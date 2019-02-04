@@ -7,49 +7,53 @@ import { Usuario } from "../models/usuario";
 import { UserDTO } from "../models/userDTO";
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: "root"
 })
 export class UsuarioService {
+  constructor(private api: Api) {}
 
-    constructor(private api: Api) { }
+  get(login: string): Observable<HttpResponse<any>> {
+    return this.api.get("api/usuarios/" + login);
+  }
 
-    get(login: string): Observable<HttpResponse<any>> {
-        return this.api.get("api/usuarios/"+login);
-    }
+  async getUsuario(login: string): Promise<Usuario> {
+    let res = await this.get(login).toPromise();
+    let usuario = res.body;
+    return usuario;
+  }
 
-    delete(usuario: Usuario): Observable<HttpResponse<any>>{
-        usuario.enabled = false;
-          return  this.update(usuario);
-        
-    }
+  delete(usuario: Usuario): Observable<HttpResponse<any>> {
+    usuario.enabled = false;
+    return this.update(usuario);
+  }
 
-    update(usuario:Usuario):Observable<HttpResponse<any>>{
-        return this.api.put("api/usuarios",usuario);
-    }
+  update(usuario: Usuario): Observable<HttpResponse<any>> {
+    return this.api.put("api/usuarios", usuario);
+  }
 
-    create(usuario:Usuario){
-        return this.api.post("api/usuarios",usuario);
-    }
+  create(usuario: Usuario) {
+    return this.api.post("api/usuarios", usuario);
+  }
 
-    changePassowrd(passwordChange: PasswordChangeDTO): Observable<HttpResponse<any>>{
-        return this.api.post("sec/account/change-password",passwordChange);
-    }
+  changePassowrd(
+    passwordChange: PasswordChangeDTO
+  ): Observable<HttpResponse<any>> {
+    return this.api.post("sec/account/change-password", passwordChange);
+  }
 
-    getUserDTO(login: string): Observable<HttpResponse<any>> {
-        return this.api.get("sec/users/"+login);
-    }
+  getUserDTO(login: string): Observable<HttpResponse<any>> {
+    return this.api.get("sec/users/" + login);
+  }
 
-    desactiveUserDTO(login: string): Observable<HttpResponse<any>> {
-        return this.api.post("sec/users/desactive",login);
-    }
+  desactiveUserDTO(login: string): Observable<HttpResponse<any>> {
+    return this.api.post("sec/users/desactive", login);
+  }
 
-    updateUserDTO(userDTO: UserDTO): Observable<HttpResponse<any>> {
-        return this.api.put("sec/users/",userDTO);
-    }
+  updateUserDTO(userDTO: UserDTO): Observable<HttpResponse<any>> {
+    return this.api.put("sec/users/", userDTO);
+  }
 
-    createUserDTO(userDTO: UserDTO): Observable<HttpResponse<any>>{
-        return this.api.post("sec/users",userDTO);
-    }
-
-
+  createUserDTO(userDTO: UserDTO): Observable<HttpResponse<any>> {
+    return this.api.post("sec/users", userDTO);
+  }
 }

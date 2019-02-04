@@ -3,14 +3,30 @@
     <!--  our side menu  -->
     <ion-menu>
       <ion-header>
-        <ion-toolbar color="medium">
-          <ion-title >Menu</ion-title>
-        </ion-toolbar>
+        <ion-toolbar color="medium"> <ion-title>Menu</ion-title> </ion-toolbar>
       </ion-header>
       <ion-content>
         <ion-list>
-          <ion-menu-toggle auto-hide="false" *ngFor="let p of pages">
-            <app-menu-item [link]="p"></app-menu-item>
+          <ion-menu-toggle auto-hide="false">
+            <ion-grid>
+              <ion-row>
+                <ion-col size="4">
+                  <ion-avatar>
+                    <ion-img
+                      [src]="photo"
+                      name="photo"
+                      class="avatar"
+                    ></ion-img>
+                  </ion-avatar>
+                </ion-col>
+                <ion-col size="8" align-self-center text-justify>
+                  <div *ngIf="usuario" >{{ usuario.nome }}</div>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+            <div *ngFor="let p of pages">
+              <app-menu-item [link]="p"></app-menu-item>
+            </div>
           </ion-menu-toggle>
         </ion-list>
       </ion-content>

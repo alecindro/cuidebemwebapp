@@ -160,44 +160,6 @@ export class ResponsavelPage implements OnInit {
       console.log(err);
     });
   }
-  /* async addTelefone() {
-     let telefone = new Telefone();
-      let responsavelTelefone = new ResponsavelTelefone();
-      responsavelTelefone.telefone = new Telefone();
-      this.responsavelTelefones.push(responsavelTelefone);
-      console.log("Tamanho do telefone: " + this.responsavelTelefones.length);
-     const modalTelefone = await this.modalCtrl.create({
-       component: ModalTelefonePage,
-       componentProps: {
-         'telefone': telefone
-       }
-     });
-     await modalTelefone.present();
-     await modalTelefone.onDidDismiss().then((data: OverlayEventDetail) => {
-       let responsavelTelefone = new ResponsavelTelefone();
-       let _telefone = data.data;
-       responsavelTelefone.telefone = _telefone;
-       responsavelTelefone.responsavel = this.responsavelPaciente.responsavel;
-       this.responsavelTelefones.push(responsavelTelefone);
-     });
-   }
-   
-    async editTelefone(responsavelTelefone: ResponsavelTelefone) {
-     const modalTelefone = await this.modalCtrl.create({
-       component: ModalTelefonePage,
-       componentProps: {
-         'telefone': responsavelTelefone.telefone
-       }
-     });
-     await modalTelefone.present();
-     await modalTelefone.onDidDismiss().then((data: OverlayEventDetail) => {
-       let _telefone = data.data;
-       responsavelTelefone.telefone = _telefone;
-     });
-   }
- 
-   
-   */
 
   addTelefone(tel: Telefone) {
 

@@ -8,7 +8,6 @@ import { Camera, CameraOptions, PictureSourceType } from '@ionic-native/camera/n
 import { UsuarioTelefone } from '../models/usuariotelefone';
 import { Telefone } from '../models/telefone';
 import { UsuarioTelefoneService } from '../services/usuarioTelefone-service';
-import { AngularWaitBarrier } from 'blocking-proxy/built/lib/angular_wait_barrier';
 import { UsuarioPhotoService } from '../services/usuariophoto-service';
 
 @Component({

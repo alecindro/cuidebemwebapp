@@ -28,7 +28,10 @@ const routes: Routes = [
   { path: 'paciente', loadChildren: './paciente/paciente.module#PacientePageModule',runGuardsAndResolvers: 'always' },
   { path: 'responsaveis', loadChildren: './responsaveis/responsaveis.module#ResponsaveisPageModule',runGuardsAndResolvers: 'always' },
   { path: 'modalTelefone', loadChildren: './modal-telefone/modal-telefone.module#ModalTelefonePageModule',runGuardsAndResolvers: 'always' },
-  { path: 'cuidador-detail', loadChildren: './cuidador-detail/cuidador-detail.module#CuidadorDetailPageModule',runGuardsAndResolvers: 'always' }
+  { path: 'cuidador-detail', loadChildren: './cuidador-detail/cuidador-detail.module#CuidadorDetailPageModule',runGuardsAndResolvers: 'always' },
+  { path: 'memo', loadChildren: './memo/memo.module#MemoPageModule',runGuardsAndResolvers: 'always' },
+  { path: 'photo-modal', loadChildren: './photo-modal/photo-modal.module#PhotoModalPageModule' ,runGuardsAndResolvers: 'always'},
+  { path: 'evento-modal', loadChildren: './evento-modal/evento-modal.module#EventoModalPageModule' ,runGuardsAndResolvers: 'always'}
 ];
 
 @NgModule({

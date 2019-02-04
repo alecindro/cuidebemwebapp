@@ -6,6 +6,9 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { EventosPage } from './eventos.page';
+import { IconEventPipe } from '../icon-event.pipe';
+import { MemoPageModule } from '../memo/memo.module';
+
 
 const routes: Routes = [
   {
@@ -19,8 +22,9 @@ const routes: Routes = [
     CommonModule,
     FormsModule,
     IonicModule,
+    MemoPageModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [EventosPage]
+  declarations: [EventosPage,IconEventPipe]
 })
 export class EventosPageModule {}

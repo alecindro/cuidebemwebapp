@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { LoadingController, ModalController} from '@ionic/angular';
 import { Loading } from '../shared/loading';
 import { PacienteDTO } from '../models/pacienteDTO';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { CheckinPage } from '../checkin/checkin.page';
 import { PacientedtoService } from '../services/pacientedto-service';
 
@@ -89,8 +89,7 @@ export class HomePage  implements OnInit{
 
   async detailPaciente(){
     this.pacientedtoService.pacienteDTO = this.pacienteDTO;
-    console.log(this.pacienteDTO.paciente.nome);
-    this.router.navigateByUrl("/details/tabs/(eventos:eventos)")
+    this.router.navigateByUrl("/details/tabs/(eventos:eventos)",{skipLocationChange: true});
   }
 
 

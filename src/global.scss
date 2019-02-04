@@ -9,3 +9,24 @@
 @import '~@ionic/angular/css/text-alignment.css';
 @import '~@ionic/angular/css/text-transformation.css';
 @import '~@ionic/angular/css/flex-utils.css';
+
+.evento-grid{
+    background: var(--ion-color-primary);
+    color: var(--ion-color-light);
+}
+
+.evento-footer{
+    background: var(--ion-color-primary);
+    color: var(--ion-color-light);
+}
+
+.evento-card{
+    border-color: var(--ion-color-primary);
+}
+
+.evento-icon{
+   color:  var(--ion-color-danger);
+}
+.evento-content{
+    color: var(--ion-color-dark);
+}

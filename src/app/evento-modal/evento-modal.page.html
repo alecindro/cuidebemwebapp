@@ -1,0 +1,262 @@
+<ion-header>
+    <ion-toolbar color="primary">
+        <ion-buttons slot="start">
+            <ion-button (click)="fechar()">
+                <ion-icon name="close"></ion-icon>
+              </ion-button>
+          </ion-buttons>
+      <ion-title>Evento</ion-title>
+      <ion-buttons slot="end">
+          <ion-button (click)="delete()">
+              <ion-icon slot="icon-only" name="trash"></ion-icon>
+            </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+
+<ion-content padding>
+    <form (ngSubmit)="salvar()" novalidate #eventoaddForm="ngForm">
+        <ion-item>
+          <ion-label floating>Horário:</ion-label>
+          <ion-datetime displayFormat="HH:mm" pickerFormat="HH:mmZ"  [(ngModel)]="datahora" #name="ngModel" name="datahora" required></ion-datetime>
+        </ion-item>
+
+          <ion-item>
+          <ion-label floating>Tipo de Evento:</ion-label>
+          <ion-select [(ngModel)]="evento.grupoevento" interface="popover" (ionChange)="selectedGrupo(evento.grupoevento)" required name="grupoevento">
+            <ion-select-option *ngFor="let grupoevento of grupoEventos"   [value] = "grupoevento">{{grupoevento}}
+              
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+            <ion-item *ngIf="subgrupos">
+          <ion-label floating>Rotina:</ion-label>
+          <ion-select [(ngModel)]="evento.subgrupoevento" interface="popover" (ionChange)="selectedSubgrupo(evento.subgrupoevento)" required #subgrupoevento="ngModel" name="subgrupoevento">
+            <ion-select-option *ngFor="let subgrupoevento of subgrupos"  [value] = "descricao">{{subgrupoevento.rotina}}</ion-select-option>
+          </ion-select>
+          </ion-item>
+           <ion-item *ngIf="subgrupoSelected == eventorotina.sinaisvitais[0].rotina && grupoSelected == grupoEventos[0]">          <ion-label floating>Pressão Sistólica (mm Hg)</ion-label>
+          <ion-input type="number" [(ngModel)]="evento.pressaoinicial" clearInput required #pressaoinicial="ngModel" name="pressaoinicial"></ion-input>
+        </ion-item>
+        
+        <ion-item *ngIf="subgrupoSelected == eventorotina.sinaisvitais[0].rotina && grupoSelected == grupoEventos[0]">
+          <ion-label floating>Pressão Diastólica (mm Hg)</ion-label>
+          <ion-input type="number" [(ngModel)]="evento.pressaofinal" clearInput required #pressaofinal="ngModel" name="pressaofinal"></ion-input>
+        </ion-item>
+        <ion-item *ngIf="subgrupoSelected == eventorotina.sinaisvitais[1].rotina && grupoSelected == grupoEventos[0]">
+          <ion-label floating>Frequência (bpm)</ion-label>
+          <ion-input type="number" [(ngModel)]="evento.value" clearInput required #valuefrequencia="ngModel" name="valuefrequencia"></ion-input>
+        </ion-item>
+        <ion-item *ngIf="subgrupoSelected == eventorotina.sinaisvitais[2].rotina && grupoSelected == grupoEventos[0]">
+          <ion-label floating>Temperatura Corporal (ºC)</ion-label>
+          <ion-input type="number" [(ngModel)]="evento.value" clearInput required #valuetemp="ngModel" name="valuetemp"></ion-input>
+        </ion-item>
+        <ion-item *ngIf="subgrupoSelected == eventorotina.sinaisvitais[3].rotina && grupoSelected == grupoEventos[0]">
+          <ion-label floating>Frequência (vezes/min)</ion-label>
+          <ion-input type="number" [(ngModel)]="evento.value" clearInput required #valuefreq="ngModel" name="valuefreq"></ion-input>
+        </ion-item>
+        <ion-item *ngIf="subgrupoSelected == eventorotina.sinaisvitais[4].rotina && grupoSelected == grupoEventos[0]">
+          <ion-label floating>Saturação (%)</ion-label>
+          <ion-input type="number" [(ngModel)]="evento.value" clearInput required #valuesat="ngModel" name="valuesat"></ion-input>
+        </ion-item>
+        <ion-item *ngIf="subgrupoSelected == eventorotina.sinaisvitais[5].rotina && grupoSelected == grupoEventos[0]">
+          <ion-label floating>Glicemia (mmHg)</ion-label>
+          <ion-input type="number" [(ngModel)]="evento.value" clearInput required #valueglic="ngModel" name="valueglic"></ion-input>
+        </ion-item>
+        <ion-item *ngIf="subgrupoSelected == eventorotina.respiratorio[0].rotina && grupoSelected == grupoEventos[1]">
+          <ion-label floating>Descrição:</ion-label>
+          <ion-select [(ngModel)]="evento.descricao" interface="popover" required #descrotina="ngModel" name="descrotina">
+            <ion-select-option *ngFor="let opcao of eventorotina.respiratorio[0].opcoes"  [value] = "opcao">{{opcao}}</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item *ngIf="subgrupoSelected == eventorotina.respiratorio[0].rotina && grupoSelected == grupoEventos[1]">
+          <ion-label floating>Quantidade:</ion-label>
+          <ion-select [(ngModel)]="evento.quantidade" interface="popover" required #quantrotina="ngModel" name="quantrotina">
+            <ion-select-option *ngFor="let qtidade of eventorotina.respiratorio[0].quantidade"  [value] = "qtidade">{{qtidade}}</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item *ngIf="subgrupoSelected == eventorotina.respiratorio[0].rotina && grupoSelected == grupoEventos[1]">
+          <ion-label floating>Aspecto:</ion-label>
+          <ion-select [(ngModel)]="evento.aspecto" interface="popover" required #aspecto="ngModel" name="aspecto">
+            <ion-select-option *ngFor="let aspect of eventorotina.respiratorio[0].aspecto"  [value] = "aspect">{{aspect}}</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item *ngIf="subgrupoSelected == eventorotina.respiratorio[1].rotina && grupoSelected == grupoEventos[1]">
+          <ion-label floating>Descrição:</ion-label>
+          <ion-select [(ngModel)]="evento.descricao" interface="popover" required #descrotina1="ngModel" name="descrotina1">
+            <ion-select-option *ngFor="let opcao of eventorotina.respiratorio[1].opcoes"  [value] = "opcao">{{opcao}}</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item *ngIf="subgrupoSelected == eventorotina.respiratorio[1].rotina && grupoSelected == grupoEventos[1]">
+          <ion-label floating>Quantidade:</ion-label>
+          <ion-select [(ngModel)]="evento.quantidade" interface="popover" required #quantrotina1="ngModel" name="quantrotina1">
+            <ion-select-option *ngFor="let qtidade of eventorotina.respiratorio[1].quantidade"  [value] = "qtidade">{{qtidade}}</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item *ngIf="subgrupoSelected == eventorotina.respiratorio[1].rotina && grupoSelected == grupoEventos[1]">
+          <ion-label floating>Aspecto:</ion-label>
+          <ion-select [(ngModel)]="evento.aspecto" interface="popover" required #asprotina1="ngModel" name="asprotina1">
+            <ion-select-option *ngFor="let aspect of eventorotina.respiratorio[1].aspecto"  [value] = "aspect">{{aspect}}</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item *ngIf="subgrupoSelected == eventorotina.nutricao[0].rotina && grupoSelected == grupoEventos[2]">
+          <ion-label floating>Descrição:</ion-label>
+          <ion-select [(ngModel)]="evento.descricao" interface="popover" required #descrotina2="ngModel" name="descrotina2">
+            <ion-select-option *ngFor="let opcao of eventorotina.nutricao[0].opcoes"  [value] = "opcao">{{opcao}}</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item *ngIf="subgrupoSelected == eventorotina.nutricao[1].rotina && grupoSelected == grupoEventos[2]">
+          <ion-label floating>Descrição:</ion-label>
+          <ion-select [(ngModel)]="evento.descricao" interface="popover" required #descrotina3="ngModel" name="descrotina3">
+            <ion-select-option *ngFor="let opcao of eventorotina.nutricao[1].opcoes"  [value] = "opcao">{{opcao}}</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item *ngIf="subgrupoSelected == eventorotina.nutricao[2].rotina && grupoSelected == grupoEventos[2]">
+          <ion-label floating>Descrição:</ion-label>
+          <ion-select [(ngModel)]="evento.descricao" interface="popover" required #descrotina4="ngModel" name="descrotina4">
+            <ion-select-option *ngFor="let opcao of eventorotina.nutricao[2].opcoes"  [value] = "opcao">{{opcao}}</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item *ngIf="subgrupoSelected == eventorotina.nutricao[3].rotina && grupoSelected == grupoEventos[2]">
+          <ion-label floating>Descrição:</ion-label>
+          <ion-select [(ngModel)]="evento.descricao" interface="popover" required #descrotina5="ngModel" name="descrotina5">
+            <ion-select-option *ngFor="let opcao of eventorotina.nutricao[3].opcoes"  [value] = "opcao">{{opcao}}</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item *ngIf="subgrupoSelected == eventorotina.nutricao[4].rotina && grupoSelected == grupoEventos[2]">
+          <ion-label floating>Descrição:</ion-label>
+          <ion-select [(ngModel)]="evento.descricao" interface="popover" required #descrotina6="ngModel" name="descrotina6">
+            <ion-select-option *ngFor="let opcao of eventorotina.nutricao[4].opcoes"  [value] = "opcao">{{opcao}}</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item *ngIf="subgrupoSelected == eventorotina.nutricao[5].rotina && grupoSelected == grupoEventos[2]">
+          <ion-label floating>Descrição:</ion-label>
+          <ion-select [(ngModel)]="evento.descricao" interface="popover" required #descrotina7="ngModel" name="descrotina7">
+            <ion-select-option *ngFor="let opcao of eventorotina.nutricao[5].opcoes"  [value] = "opcao">{{opcao}}</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item *ngIf="subgrupoSelected == eventorotina.eliminacao[0].rotina && grupoSelected == grupoEventos[5]">
+          <ion-label floating>Quantidade:</ion-label>
+          <ion-select [(ngModel)]="evento.quantidade" interface="popover" required #quantrotina2="ngModel" name="quantrotina2">
+            <ion-select-option *ngFor="let qtidade of eventorotina.eliminacao[0].quantidade"  [value] = "qtidade">{{qtidade}}</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item *ngIf="subgrupoSelected == eventorotina.eliminacao[0].rotina && grupoSelected == grupoEventos[5]">
+          <ion-label floating>Aspecto:</ion-label>
+          <ion-select [(ngModel)]="evento.aspecto" interface="popover" required #asprotina2="ngModel" name="asprotina2">
+            <ion-select-option *ngFor="let aspect of eventorotina.eliminacao[0].aspecto"  [value] = "aspect">{{aspect}}</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item *ngIf="subgrupoSelected == eventorotina.eliminacao[1].rotina && grupoSelected == grupoEventos[5]">
+          <ion-label floating>Quantidade:</ion-label>
+          <ion-select [(ngModel)]="evento.quantidade" interface="popover" required #quantrotina3="ngModel" name="quantrotina3">
+            <ion-select-option *ngFor="let qtidade of eventorotina.eliminacao[1].quantidade"  [value] = "qtidade">{{qtidade}}</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item *ngIf="subgrupoSelected == eventorotina.eliminacao[1].rotina && grupoSelected == grupoEventos[5]">
+          <ion-label floating>Aspecto:</ion-label>
+          <ion-select [(ngModel)]="evento.aspecto" interface="popover" required #asprotina3="ngModel" name="asprotina3">
+            <ion-select-option *ngFor="let aspect of eventorotina.eliminacao[1].aspecto"  [value] = "aspect">{{aspect}}</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item *ngIf="subgrupoSelected == eventorotina.eliminacao[2].rotina && grupoSelected == grupoEventos[5]">
+          <ion-label floating>Quantidade:</ion-label>
+          <ion-select [(ngModel)]="evento.quantidade" interface="popover" required #quantrotina4="ngModel" name="quantrotina4">
+            <ion-select-option *ngFor="let qtidade of eventorotina.eliminacao[2].quantidade"  [value] = "qtidade">{{qtidade}}</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item *ngIf="subgrupoSelected == eventorotina.eliminacao[2].rotina && grupoSelected == grupoEventos[5]">
+          <ion-label floating>Aspecto:</ion-label>
+          <ion-select [(ngModel)]="evento.aspecto" interface="popover" #asprotina4="ngModel" required name="asprotina4">
+            <ion-select-option *ngFor="let aspect of eventorotina.eliminacao[2].aspecto"  [value] = "aspect">{{aspect}}</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item *ngIf="subgrupoSelected == eventorotina.bemestar[0].rotina && grupoSelected == grupoEventos[7]">
+          <ion-label floating>Quantidade:</ion-label>
+          <ion-select [(ngModel)]="evento.descricao" interface="popover" #quantrotina5="ngModel" required name="quantrotina5">
+            <ion-select-option *ngFor="let opcao of eventorotina.bemestar[0].opcoes"  [value] = "opcao">{{opcao}}</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item *ngIf="subgrupoSelected == eventorotina.bemestar[1].rotina && grupoSelected == grupoEventos[7]">
+          <ion-label floating>Quantidade:</ion-label>
+          <ion-select [(ngModel)]="evento.descricao" interface="popover" #descrotina8="ngModel" required name="descrotina8">
+            <ion-select-option *ngFor="let opcao of eventorotina.bemestar[1].opcoes"  [value] = "opcao">{{opcao}}</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item *ngIf="subgrupoSelected == eventorotina.bemestar[2].rotina && grupoSelected == grupoEventos[7]">
+          <ion-label floating>Quantidade:</ion-label>
+          <ion-select [(ngModel)]="evento.descricao" interface="popover" #descrotina9="ngModel" required name="descrotina9">
+            <ion-select-option *ngFor="let opcao of eventorotina.bemestar[2].opcoes"  [value] = "opcao">{{opcao}}</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item *ngIf="subgrupoSelected == eventorotina.bemestar[3].rotina && grupoSelected == grupoEventos[7]">
+          <ion-label floating>Quantidade:</ion-label>
+          <ion-select [(ngModel)]="evento.descricao" interface="popover" #descrotina10="ngModel" required name="descrotina10">
+            <ion-select-option *ngFor="let opcao of eventorotina.bemestar[3].opcoes"  [value] = "opcao">{{opcao}}</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item *ngIf="subgrupoSelected == eventorotina.bemestar[4].rotina && grupoSelected == grupoEventos[7]">
+          <ion-label floating>Quantidade:</ion-label>
+          <ion-select [(ngModel)]="evento.descricao" interface="popover" #descrotina11="ngModel" required name="descrotina11">
+            <ion-select-option *ngFor="let opcao of eventorotina.bemestar[4].opcoes"  [value] = "opcao">{{opcao}}</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item *ngIf="subgrupoSelected == eventorotina.atividade[0].rotina && grupoSelected == grupoEventos[8]">
+          <ion-label floating>Descricao:</ion-label>
+          <ion-select [(ngModel)]="evento.descricao" interface="popover" #descrotina12="ngModel" required name="descrotina12">
+            <ion-select-option *ngFor="let opcao of eventorotina.atividade[0].opcoes"  [value] = "opcao">{{opcao}}</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item *ngIf="subgrupoSelected == eventorotina.atividade[1].rotina && grupoSelected == grupoEventos[8]">
+          <ion-label floating>Descricao:</ion-label>
+          <ion-select [(ngModel)]="evento.descricao" interface="popover" #descrotina13="ngModel" required name="descrotina13">
+            <ion-select-option *ngFor="let opcao of eventorotina.atividade[1].opcoes"  [value] = "opcao">{{opcao}}</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item *ngIf="subgrupoSelected == eventorotina.atividade[2].rotina && grupoSelected == grupoEventos[8]">
+          <ion-label floating>Descricao:</ion-label>
+          <ion-select [(ngModel)]="evento.descricao" interface="popover" #descrotina14="ngModel" required name="descrotina14">
+            <ion-select-option *ngFor="let opcao of eventorotina.atividade[2].opcoes"  [value] = "opcao">{{opcao}}</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item *ngIf="subgrupoSelected == eventorotina.atividade[3].rotina && grupoSelected == grupoEventos[8]">
+          <ion-label floating>Descricao:</ion-label>
+          <ion-select [(ngModel)]="evento.descricao" interface="popover" #descrotina15="ngModel" required name="descrotina15">
+            <ion-select-option *ngFor="let opcao of eventorotina.atividade[3].opcoes"  [value] = "opcao">{{opcao}}</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item *ngIf="subgrupoSelected == eventorotina.atividade[4].rotina && grupoSelected == grupoEventos[8]">
+          <ion-label floating>Descricao:</ion-label>
+          <ion-select [(ngModel)]="evento.descricao" interface="popover" #descrotina16="ngModel" required name="descrotina16">
+            <ion-select-option *ngFor="let opcao of eventorotina.atividade[4].opcoes"  [value] = "opcao">{{opcao}}</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item *ngIf="subgrupoSelected == eventorotina.atividade[5].rotina && grupoSelected == grupoEventos[8]">
+          <ion-label floating>Descricao:</ion-label>
+          <ion-select [(ngModel)]="evento.descricao" interface="popover" #descrotina17="ngModel" required name="descrotina17">
+            <ion-select-option *ngFor="let opcao of eventorotina.atividade[5].opcoes"  [value] = "opcao">{{opcao}}</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item *ngIf="subgrupoSelected == eventorotina.atividade[6].rotina && grupoSelected == grupoEventos[8]">
+          <ion-label floating>Descricao:</ion-label>
+          <ion-select [(ngModel)]="evento.descricao" interface="popover" #descrotina18="ngModel" required name="descrotina18">
+            <ion-select-option *ngFor="let opcao of eventorotina.atividade[6].opcoes"  [value] = "opcao">{{opcao}}</ion-select-option>
+          </ion-select>
+        </ion-item>
+    
+        <ion-item *ngIf="!subgrupos">
+          <ion-label floating>Observação</ion-label>
+          <ion-textarea type="text" [(ngModel)]="evento.obsevento" clearInput required #obs="ngModel" name="obs"></ion-textarea>
+        </ion-item>
+        <ion-item *ngIf="subgrupos">
+          <ion-label floating>Observação</ion-label>
+          <ion-textarea type="text" [(ngModel)]="evento.obsevento" clearInput #obs2="ngModel" name="obs2"></ion-textarea>
+        </ion-item>
+        <ion-item>
+            <ion-button [disabled]="!eventoaddForm.form.valid" type="submit">Salvar</ion-button>
+          
+        </ion-item>
+    
+      </form>
+      
+</ion-content>

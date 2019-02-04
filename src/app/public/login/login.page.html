@@ -1,31 +1,56 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>login</ion-title>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content padding>
-    <ion-list class="loginScreen">
-        <ion-item>
-          <ion-label class="inputLabel text-white" position="floating">Nome de usuário</ion-label>
-          <ion-input class="text-white" type="text" [(ngModel)]="user.username"></ion-input>
-        </ion-item>
-    </ion-list>
-    <ion-list class="loginScreen mt-1">
-        <ion-item>
-            <ion-label class="inputLabel text-white" position="floating">Senha</ion-label>
-            <ion-input class="text-white" type="text" [(ngModel)]="user.password"></ion-input>
-        </ion-item>
-    </ion-list>
-    <ion-row class="mt-1">
-        <ion-col size="12" class="text-center">
-            <ion-row>
-                <ion-col>
-                    <ion-button tappable="true" class="blueButtonText defaultButton" [disabled]="!user.username" (click)="login(user)" color="light" shape="block" flat>AUTENTICAR</ion-button>
-                </ion-col>
-            </ion-row>
-        </ion-col>
+  <div class="imgbox">
+    <div class="shadow">
+      <ion-img
+        src="../../assets/imgs/mini-logo_transp.png"
+        class="logo"
+      ></ion-img>
+    </div>
+  </div>
+  <ion-grid fixed class="loginback">
+    <ion-row> <ion-col> </ion-col> </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-input
+          class="loginput"
+          placeholder="Usuário"
+          type="text"
+          [(ngModel)]="user.username"
+        ></ion-input>
+      </ion-col>
     </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-input
+        [disabled]="!user.username"
+          class="loginput"
+          type="password"
+          (keyup.enter)="login(user)"
+          placeholder="Senha"
+          [(ngModel)]="user.password"
+        ></ion-input>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="12" class="text-center">
+        <ion-row>
+          <ion-col>
+            <ion-button
+              tappable="true"
+              [disabled]="!user.username"
+              (click)="login(user)"
+              class="loginbutton"
+              shape="block"
+              color="blue"
+              flat
+              >Entrar</ion-button
+            >
+          </ion-col>
+        </ion-row>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
   <!--<ion-button (click)="login()" expand="block">Login</ion-button>
   <ion-button expand="block" color="secondary" href="/register" routerDirection="forward">Register</ion-button>-->
 </ion-content>

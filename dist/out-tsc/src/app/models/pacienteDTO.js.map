@@ -1,0 +1,1 @@
+{"version":3,"file":"pacienteDTO.js","sourceRoot":"","sources":["../../../../../src/app/models/pacienteDTO.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,MAAM,EAAE,MAAM,UAAU,CAAC;AAClC,OAAO,EAAE,QAAQ,EAAE,MAAM,YAAY,CAAC;AAGtC;IAAA;QACI,aAAQ,GAAa,IAAI,QAAQ,EAAE,CAAC;QAGvC,eAAU,GAAW,IAAI,MAAM,EAAE,CAAC;QAClC,kBAAa,GAAgC,EAAE,CAAC;IACjD,CAAC;IAAD,kBAAC;AAAD,CAAC,AAND,IAMC"}
