@@ -25,4 +25,8 @@ export class MemorandoService{
     update(memorando: Memorando): Observable<HttpResponse<any>>{
         return this.api.put('api/memorandos',memorando);
     }
+
+    delete(idmemorando:number): Observable<HttpResponse<any>>{
+        return this.api.delete('api/memorandos/'+idmemorando);
+    }
 }

@@ -16,72 +16,159 @@
       <ion-label>Não existem eventos cadastrados</ion-label>
     </ion-item>
     <div *ngFor="let timeline of timelines">
-      <ion-card *ngIf="timeline.tipo === 'evento'" class="evento-card" (click)="editEvento(timeline.timelineData)">
+      <ion-card
+        *ngIf="timeline.tipo === 'evento'"
+        class="evento-card"
+        (click)="editEvento(timeline.timelineData)"
+      >
         <ion-grid class="evento-grid">
           <ion-row align-items-center>
             <ion-col size="2">
               <div float-right>
                 <ion-icon
-                size="large"
-                class="evento-icon"
-                [name]="timeline.timelineData.grupoevento | iconEvent"
-              ></ion-icon>
-            </div>
+                  size="large"
+                  class="evento-icon"
+                  [name]="timeline.timelineData.grupoevento | iconEvent"
+                ></ion-icon>
+              </div>
             </ion-col>
-<ion-col size="4">
-    <div float-left>
-{{ timeline.timelineData.grupoevento }}  
-</div>
-</ion-col>
+            <ion-col size="4">
+              <div float-left>
+                {{ timeline.timelineData.grupoevento }}
+              </div>
+            </ion-col>
             <ion-col size="6">
-                   
-                    
-              <ion-note  float-right text-capitalize color="light">{{timeline.timelineData.usuario.nome}}</ion-note>
-                     
-                    
-                </ion-col>
-          
+              <ion-note float-right text-capitalize color="light">{{
+                timeline.timelineData.usuario.nome
+              }}</ion-note>
+            </ion-col>
           </ion-row>
         </ion-grid>
-        <ion-card-content *ngIf="timeline.timelineData.grupoevento != 'Entrou' || timeline.timelineData.grupoevento != 'Saiu' ">
+        <ion-card-content
+          *ngIf="
+            timeline.timelineData.grupoevento != 'Entrou' ||
+            timeline.timelineData.grupoevento != 'Saiu'
+          "
+        >
           <ion-grid>
-            <ion-row>
-              <ion-col align-self-start size="12">
-                <div text-start class="evento-content">
-                  <p *ngIf="timeline.timelineData.subgrupoevento">
-                    {{ timeline.timelineData.subgrupoevento }}
-                  </p>
-                  <p *ngIf="timeline.timelineData.respeventos">
-                    {{ timeline.timelineData.respeventos }}
-                  </p>
-                  <p *ngIf="timeline.timelineData.peso">
-                    {{ timeline.timelineData.peso }}
-                  </p>
-                  <p *ngIf="timeline.timelineData.pressaoinicial">
-                      Pressão Sistólica (mm Hg): {{ timeline.timelineData.pressaoinicial }}
-                  </p>
-                  <p *ngIf="timeline.timelineData.pressaofinal">
-                      Pressão Diastólica (mm Hg): {{ timeline.timelineData.pressaofinal }}
-                  </p>
-                  <p *ngIf="timeline.timelineData.value">
-                    value: {{ timeline.timelineData.value }}
-                  </p>
-                  <p *ngIf="timeline.timelineData.aspecto">
-                    aspecto: {{ timeline.timelineData.aspecto }}
-                  </p>
-                  <p *ngIf="timeline.timelineData.quantidade">
-                    quantidade: {{ timeline.timelineData.quantidade }}
-                  </p>
-                  <p *ngIf="timeline.timelineData.obsevento">
-                      Observação: {{ timeline.timelineData.obsevento }}
-                    </p>
+            <ion-row *ngIf="timeline.timelineData.subgrupoevento">
+              <ion-col>
+                <ion-label>Rotina:</ion-label>
+              </ion-col>
+              <ion-col>
+                <div>
+                  {{ timeline.timelineData.subgrupoevento }}
                 </div>
+              </ion-col>
+            </ion-row>
+            <ion-row *ngIf="timeline.timelineData.pressaoinicial">
+              <ion-col>
+                <ion-label>Pressão Sistólica (mm Hg)</ion-label>
+              </ion-col>
+              <ion-col>
+                <div>
+                  {{ timeline.timelineData.pressaoinicial }}
+                </div>
+              </ion-col>
+            </ion-row>
+
+            <ion-row *ngIf="timeline.timelineData.pressaofinal">
+              <ion-col>
+                <ion-label>Pressão Diastólica (mm Hg)</ion-label>
+              </ion-col>
+              <ion-col>
+                <div>
+                  {{ timeline.timelineData.pressaofinal }}
+                </div>
+              </ion-col>
+            </ion-row>
+            <ion-row *ngIf="timeline.timelineData.value">
+              <ion-col
+                *ngIf="
+                  timeline.timelineData.subgrupoevento ==
+                  eventoRotina.sinaisvitais[1].rotina &&
+                  timeline.timelineData.grupoevento == grupoEventos[0]
+                "
+              >
+                <ion-label>Frequência (bpm)</ion-label>
+              </ion-col>
+              <ion-col
+                *ngIf="
+                  timeline.timelineData.subgrupoevento ==
+                  eventoRotina.sinaisvitais[2].rotina &&
+                  timeline.timelineData.grupoevento == grupoEventos[0]
+                "
+              >
+                <ion-label>Temperatura Corporal (ºC)</ion-label>
+              </ion-col>
+              <ion-col
+                *ngIf="
+                  timeline.timelineData.subgrupoevento ==
+                  eventoRotina.sinaisvitais[3].rotina &&
+                  timeline.timelineData.grupoevento == grupoEventos[0]
+                "
+              >
+                <ion-label>Frequência (vezes/min)</ion-label>
+              </ion-col>
+              <ion-col
+                *ngIf="
+                  timeline.timelineData.subgrupoevento ==
+                  eventoRotina.sinaisvitais[4].rotina &&
+                  timeline.timelineData.grupoevento == grupoEventos[0]
+                "
+              >
+                <ion-label>Saturação (%)</ion-label>
+              </ion-col>
+              <ion-col
+                *ngIf="
+                  timeline.timelineData.subgrupoevento ==
+                  eventoRotina.sinaisvitais[5].rotina &&
+                  timeline.timelineData.grupoevento == grupoEventos[0]
+                "
+              >
+                <ion-label>Glicemia (mmHg)</ion-label>
+              </ion-col>
+              <ion-col>
+                <div>
+                  {{ timeline.timelineData.value }}
+                </div>
+              </ion-col>
+            </ion-row>
+            <ion-row *ngIf="timeline.timelineData.descricao">
+              <ion-col>
+                <ion-label>Descrição:</ion-label>
+              </ion-col>
+              <ion-col>
+                {{ timeline.timelineData.descricao }}
+              </ion-col>
+            </ion-row>
+            <ion-row *ngIf="timeline.timelineData.quantidade">
+              <ion-col>
+                <ion-label>Quantidade:</ion-label>
+              </ion-col>
+              <ion-col>
+                {{ timeline.timelineData.quantidade }}
+              </ion-col>
+            </ion-row>
+            <ion-row *ngIf="timeline.timelineData.aspecto">
+              <ion-col>
+                <ion-label>Aspecto:</ion-label>
+              </ion-col>
+              <ion-col>
+                {{ timeline.timelineData.aspecto }}
+              </ion-col>
+            </ion-row>
+            <ion-row *ngIf="timeline.timelineData.obsevento">
+              <ion-col>
+                <ion-label>Observação</ion-label>
+              </ion-col>
+              <ion-col>
+                {{ timeline.timelineData.obsevento }}
               </ion-col>
             </ion-row>
           </ion-grid>
         </ion-card-content>
 
-        
         <div class="item item-divider evento-footer">
           <div text-center color="light">
             <ion-datetime
@@ -93,13 +180,18 @@
           </div>
         </div>
       </ion-card>
-      <ion-card color="dark" *ngIf="timeline.tipo === 'memo'" (click)="editMemorando(timeline.timelineData)">
+      <ion-card
+        color="dark"
+        *ngIf="timeline.tipo === 'memo'"
+        (click)="editMemorando(timeline.timelineData)"
+      >
         <ion-grid class="evento-grid">
           <ion-row align-items-center>
             <ion-col align-self-start>
               <div text-end text-capitalize>
-               
-                <ion-note color="light">{{timeline.timelineData.usuario.nome}}</ion-note>
+                <ion-note color="light">{{
+                  timeline.timelineData.usuario.nome
+                }}</ion-note>
               </div>
             </ion-col>
           </ion-row>
@@ -118,26 +210,30 @@
           </ion-card-title>
         </ion-card-header>
         <div class="item item-divider evento-footer">
-            <div text-center color="light">
-          <ion-datetime
-            *ngIf="!timeline.timelineData.dataalteracao"
-            display-format="DD MMM YYYY HH:ss"
-            readonly
-            [value]="timeline.timelineData.dataregistro"
-          >
-          </ion-datetime>
+          <div text-center color="light">
+            <ion-datetime
+              *ngIf="!timeline.timelineData.dataalteracao"
+              display-format="DD MMM YYYY HH:ss"
+              readonly
+              [value]="timeline.timelineData.dataregistro"
+            >
+            </ion-datetime>
 
-          <ion-datetime
-            *ngIf="timeline.timelineData.dataalteracao"
-            display-format="DD MMM YYYY HH:ss"
-            readonly
-            [value]="timeline.timelineData.dataalteracao"
-          >
-          </ion-datetime>
+            <ion-datetime
+              *ngIf="timeline.timelineData.dataalteracao"
+              display-format="DD MMM YYYY HH:ss"
+              readonly
+              [value]="timeline.timelineData.dataalteracao"
+            >
+            </ion-datetime>
           </div>
         </div>
       </ion-card>
-      <ion-card color="light" *ngIf="timeline.tipo === 'photo'" (click)="editPhoto(timeline.timelineData)">
+      <ion-card
+        color="light"
+        *ngIf="timeline.tipo === 'photo'"
+        (click)="editPhoto(timeline.timelineData)"
+      >
         <ion-grid class="evento-grid">
           <ion-row align-items-center>
             <ion-col align-self-start>
@@ -182,16 +278,22 @@
       </ion-card>
     </div>
   </ion-list>
-  <ion-fab vertical="bottom" horizontal="end" edge="true" slot="fixed" style="margin-bottom:30px">
+  <ion-fab
+    vertical="bottom"
+    horizontal="end"
+    edge="true"
+    slot="fixed"
+    style="margin-bottom:30px"
+  >
     <ion-fab-button> <ion-icon name="add"></ion-icon></ion-fab-button>
     <ion-fab-list side="top">
-      <ion-fab-button (click)="addPhoto()" color="tertiary">
+      <ion-fab-button (click)="addPhoto()" color="primary">
         <ion-icon name="camera" size="large"></ion-icon>
       </ion-fab-button>
-      <ion-fab-button (click)="addMemorando()" color="dark">
+      <ion-fab-button (click)="addMemorando()" color="primary">
         <ion-icon name="copy" size="large"></ion-icon>
       </ion-fab-button>
-      <ion-fab-button (click)="addEvento()" color="success">
+      <ion-fab-button (click)="addEvento()" color="primary">
         <ion-icon name="clipboard" size="large"></ion-icon>
       </ion-fab-button>
     </ion-fab-list>

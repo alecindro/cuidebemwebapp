@@ -1,8 +1,9 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import { PacienteDTO } from '../models/pacienteDTO';
-import { ModalController } from '@ionic/angular';
-import { Api } from '../services/api/api';
-import { PacientedtoService } from '../services/pacientedto-service';
+import { ModalController, NavParams } from '@ionic/angular';
+import { Evento } from '../models/evento';
+import { AuthServerProvider } from '../services/auth-jwt.service';
+import { EventoService } from '../services/evento-service';
 
 @Component({
   selector: 'app-checkin',
@@ -11,27 +12,49 @@ import { PacientedtoService } from '../services/pacientedto-service';
 })
 export class CheckinPage implements OnInit {
 
-  @Input() pacienteDTO:PacienteDTO; 
+   pacienteDTO:PacienteDTO = new PacienteDTO(); 
+   evento:Evento;
+   CHECKIN ="Entrou";
+   CHECKOUT ="Saiu";
+   datahora: string;
+   
 
-  constructor(private modalCtrl:ModalController, private pacientedtoService: PacientedtoService) { }
+  constructor(private modalCtrl:ModalController,
+     private eventoService: EventoService,
+     private navParams: NavParams , 
+     private authServerProvider: AuthServerProvider) { }
 
   ngOnInit() {
+    this.pacienteDTO = this.navParams.get("pacienteDTO");
+    this.evento = new Evento();
+    this.evento.dataevento = new Date();
+    this.evento.dataregistro = new Date();
+    this.evento.paciente = this.pacienteDTO.paciente;
+    this.evento.enabled = true;
+    console.log("Estado paciente " + this.pacienteDTO.checkin);
+    if(this.pacienteDTO.checkin){
+      this.evento.grupoevento = this.CHECKIN;
+    } else{
+      this.evento.grupoevento = this.CHECKOUT;
+    }
+    this.evento.usuario = this.authServerProvider.usuario;
+    this.evento.dataregistro.setHours(this.evento.dataregistro.getHours() - (this.evento.dataregistro.getTimezoneOffset() / 60));
+       this.datahora = this.evento.dataregistro.toISOString();
+    
   }
 
   check(){
-    this.pacienteDTO.checkin = !this.pacienteDTO.checkin;
-    if(this.pacienteDTO.checkin){
-    this.pacientedtoService.checkin(this.pacienteDTO).subscribe((response)=>{
-      this.pacienteDTO = response.body;
-    });
-    }else{
-      this.pacientedtoService.checkout(this.pacienteDTO).subscribe((response)=>{
-        this.pacienteDTO = response.body;
-      });
-    }
-    this.modalCtrl.dismiss(this.pacienteDTO);
+    let _data = new Date(this.datahora);
+    _data.setHours(_data.getHours() + (_data.getTimezoneOffset() / 60));
+   this.evento.dataevento = _data;
+    this.eventoService.save(this.evento).subscribe(res => {
+      this.modalCtrl.dismiss();    
+    }, err => {
+      console.log(err.error);
+    })
   }
-  cancelar(){
+  fechar(){
+    this.pacienteDTO.checkin = !this.pacienteDTO.checkin; 
     this.modalCtrl.dismiss();
   }
 

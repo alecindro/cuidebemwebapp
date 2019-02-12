@@ -1,28 +1,83 @@
 <ion-header>
   <ion-toolbar color="primary">
-    <ion-title *ngIf="!pacienteDTO.checkin">Checkin</ion-title>
-    <ion-title *ngIf="pacienteDTO.checkin">Checkout</ion-title>
-   <ion-buttons slot="end">
-        <ion-button (click)="cancelar()">
-          <span ion-text color="primary">Cancelar</span>
-          <ion-icon name="md-close" showWhen="android,windows"></ion-icon>
-        </ion-button>
-      </ion-buttons>
+      <ion-buttons slot="start">
+          <ion-button (click)="fechar()">
+            <ion-icon name="close"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+    <ion-title *ngIf="pacienteDTO.checkin">Entrada</ion-title>
+    <ion-title *ngIf="!pacienteDTO.checkin">Saída</ion-title>
   </ion-toolbar>
 </ion-header>
 
+
 <ion-content padding>
-  <ion-list>
-    <ion-item (click)="check()">
-      <ion-avatar item-start>
-        <img [src]="pacienteDTO.photo">
-      </ion-avatar>
-      <ion-label item-content>
-      <h2>{{pacienteDTO.paciente.apelido || pacienteDTO.paciente.nome}}</h2>
-    </ion-label>
-      <ion-button item-end color="primary" *ngIf="!pacienteDTO.checkin">Checkin</ion-button>
-      <ion-button item-end color="primary" *ngIf="pacienteDTO.checkin">Checkout</ion-button>
-   </ion-item>
-</ion-list>
+
+<ion-card
+        color="light"
+      >
+        <ion-grid class="evento-grid">
+          <ion-row align-items-center>
+            <ion-col align-self-start>
+              <div text-end text-capitalize>
+                <ion-note color="light">
+                    {{pacienteDTO.paciente.apelido || pacienteDTO.paciente.nome}}
+                </ion-note>
+              </div>
+            </ion-col>
+          </ion-row>
+          <ion-row align-items-center>
+            <ion-col align-self-start>
+              <ion-img
+                [src]="pacienteDTO.photo"
+                class="avatar"
+              ></ion-img>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+</ion-card>
+       
+          <ion-grid>
+            <ion-row>
+              <ion-col>
+              <ion-item >
+                  <ion-label position="floating">Meio de Transporte</ion-label>
+                  <ion-select [(ngModel)]="evento.descricao">
+                      <ion-select-option value="carro">Carro</ion-select-option>
+                      <ion-select-option value="onibus">Ônibus</ion-select-option>
+                      <ion-select-option value="taxi">Táxi</ion-select-option>
+                      <ion-select-option value="pe">A pé</ion-select-option>
+                      <ion-select-option value="outro">Outro</ion-select-option>
+                    </ion-select>
+                </ion-item>
+                </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col>
+                <ion-item>
+                    <ion-label position="floating">Acompanhante</ion-label>
+                  <ion-input type="text" [(ngModel)]="evento.obsevento" name="obs"></ion-input>
+                </ion-item>
+                </ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col>
+                    <ion-item>
+                        <ion-label position="floating">Data e Hora</ion-label>
+                    <ion-datetime display-format="DD/MM/YYYY HH:mm" [(ngModel)]=" datahora"></ion-datetime>
+                  </ion-item>
+                  </ion-col>
+              </ion-row>
+
+      <ion-row>
+          <ion-col size="12">
+              <ion-button  color="primary" strong="true" expand="block" (click)="check()" 
+                >Registrar</ion-button
+              >
+                    </ion-col>
+        </ion-row>
+          </ion-grid>
+
+        
 
 </ion-content>

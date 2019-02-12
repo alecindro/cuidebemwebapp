@@ -2,15 +2,20 @@
    text-align: center;
    margin-top: 30px;
    /*background: var(--ion-color-medium); 
+   background-color: #4E6799;
    
    */
-   background-color: #4E6799;
+
+   background: var(--ion-color-primary);
    -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
     border-radius: 5px;
     box-shadow: 10px 10px grey;
  
 }
+
+/*ion-content{--background:var(--ion-background-color,--ion-color-primary)}
+*/
 .loginput{
     background: var(--ion-color-light);
     -moz-border-radius: 5px;
@@ -21,7 +26,8 @@
     color: var(--ion-color-dark);
 }
 .loginbutton{
-    background: var(--ion-color-blue);
+    background: var(--ion-color-primary);
+    /*background: var(--ion-color-blue);
     /*background-color: #30415a;*/
     font-weight: bold;
     -moz-border-radius: 5px;

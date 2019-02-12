@@ -47,12 +47,9 @@
       </ion-col>
       <ion-col size="2">
         <div>
-          <ion-button  *ngIf="pacientedto.checkin" color="light" >
-              <ion-icon name="power" slot="icon-only" color="primary"></ion-icon>
-          </ion-button>
-          <ion-button  *ngIf="!pacientedto.checkin" color="light">
-              <ion-icon name="power" slot="icon-only" color="danger"></ion-icon>
-          </ion-button>
+          <ion-toggle [(ngModel)]="pacientedto.checkin" color="secondary" (ionChange)="onChange(pacientedto)">
+
+          </ion-toggle>
         </div>
       </ion-col>
       <hr>

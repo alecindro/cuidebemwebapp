@@ -15,10 +15,10 @@ import { Usuario } from "./models/usuario";
 })
 export class AppComponent implements OnInit {
   pages = [
-    { title: "Home", url: "/home" },
-    { title: "Cadastros", url: "/cadastros" },
-    { title: "Configurações", url: "/configuracoes" },
-    { title: "Sair", url: "/logout" }
+    { title: "Home", url: "/home" , role: ['ROLE_USER', 'ROLE_ADMIN']},
+    { title: "Cadastros", url: "/cadastros",role: ['ROLE_ADMIN','ROLE_CADASTRO'] },
+    { title: "Configurações", url: "/configuracoes",role:  ['ROLE_USER', 'ROLE_ADMIN'] },
+    { title: "Sair", url: "/logout",role:'ROLE_ANONYMOUS' }
   ];
   usuario: Usuario;
   photo: String;
@@ -54,13 +54,6 @@ export class AppComponent implements OnInit {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
 
-      this.authServerProvider.isAuthenticated().then((value) => {
-        if (value) {
-          this.router.navigate(['home']);
-        } else {
-          this.router.navigate(['login']);
-        }
-      });
       this.authServerProvider.usuarioReplay.subscribe(user =>{
       if(user){
         this.usuario = user;

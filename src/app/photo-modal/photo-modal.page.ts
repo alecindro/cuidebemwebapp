@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Platform, ModalController, NavParams } from '@ionic/angular';
+import { Platform, ModalController, NavParams, AlertController } from '@ionic/angular';
 import { Camera, CameraOptions, PictureSourceType } from '@ionic-native/camera/ngx';
-import { PhotoDTO } from './photo-dto';
+import { PacientePhoto } from '../models/paciente-photo';
+import { PacientePhotoService } from '../services/pacientephoto-service';
 
 @Component({
   selector: 'app-photo-modal',
@@ -11,18 +12,18 @@ import { PhotoDTO } from './photo-dto';
 export class PhotoModalPage implements OnInit {
 
   mobile: boolean = false;
-  photodto: PhotoDTO;
-
+  pacientePhoto: PacientePhoto;
+  editable: boolean = false;
   constructor( private platform: Platform, 
     private camera: Camera,
     public modalController: ModalController,
+    private pacientePhotoService: PacientePhotoService,
+    private alertController: AlertController,
     private navParams: NavParams) { }
 
   ngOnInit() {
-    this.photodto = this.navParams.get('photodto');
-    if(!this.photodto){
-      this.photodto = new PhotoDTO();
-    }
+    this.pacientePhoto = this.navParams.get('pacientePhoto');
+    this.editable = this.navParams.get('editable');
   }
 
 
@@ -45,7 +46,7 @@ export class PhotoModalPage implements OnInit {
     }
     this.camera.getPicture(options).then((imageData) => {
       let base64Image = 'data:image/jpeg;base64,' + imageData;
-      this.photodto.photo = base64Image;
+      this.pacientePhoto.photo = base64Image;
       this.camera.cleanup();
     }, (err) => {
       console.log(err);
@@ -57,15 +58,90 @@ export class PhotoModalPage implements OnInit {
       const reader = new FileReader();
       reader.readAsDataURL(event.srcElement.files[0]);
       reader.onload = () => {
-        this.photodto.photo = reader.result.toString();
+        this.pacientePhoto.photo = reader.result.toString();
       };
       reader.onerror = error => console.log(error);
     }
   }
 
   salvar(){
-    this.modalController.dismiss(this.photodto);
+    if(this.pacientePhoto.idpacientephoto){
+      this.update();
+    }else{
+      this.save();
+    }
+
+    
   }
+
+  private update(){
+    this.pacientePhoto.dataregistro = new Date();
+    this.pacientePhoto.principal = false;
+    this.pacientePhotoService.update(this.pacientePhoto).subscribe(
+      res => {
+        this.modalController.dismiss();
+      },
+      err => {
+        console.log(err.error);
+      }
+    );
+  }
+
+  private save(){
+    this.pacientePhoto.dataregistro = new Date();
+    this.pacientePhoto.principal = false;
+    this.pacientePhotoService.save(this.pacientePhoto).subscribe(
+      res => {
+        this.modalController.dismiss();
+      },
+      err => {
+        console.log(err.error);
+      }
+    );
+  }
+
+  excluir(){
+
+    this.pacientePhotoService.delete(this.pacientePhoto).subscribe(
+      res => {
+        this.modalController.dismiss();
+      },
+      err => {
+        console.log(err.error);
+      }
+    );
+  }
+
+  async delete(){    
+    const alert = await this.alertController.create({
+      header: 'Excluir',
+      message: '<strong>Tem certeza?</strong>',
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: (blah) => {
+            console.log('Confirm Cancel: blah');
+          }
+        }, {
+          text: 'Confimar',
+          handler: () => {
+            this.pacientePhotoService.delete(this.pacientePhoto).subscribe(res => {
+              this.modalController.dismiss();
+            }, err => {
+              console.log(err);
+            });
+            console.log('Confirm Okay');
+          }
+        }
+      ]
+    });
+    await alert.present();
+    
+  }
+
+
 
   fechar(){
     this.modalController.dismiss();

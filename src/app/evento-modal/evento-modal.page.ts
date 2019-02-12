@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { NavParams, ModalController } from '@ionic/angular';
+import { NavParams, ModalController, AlertController } from '@ionic/angular';
 import { Evento } from '../models/evento';
 import { EventoRotina } from '../models/eventorotina';
-import { connectableObservableDescriptor } from 'rxjs/internal/observable/ConnectableObservable';
 import { AuthServerProvider } from '../services/auth-jwt.service';
 import { EventoService } from '../services/evento-service';
 
@@ -20,21 +19,38 @@ export class EventoModalPage implements OnInit {
   eventorotina: EventoRotina = new EventoRotina();
   subgrupos: any;
   grupoEventos: string[];
+  editable:boolean = false;
 
   constructor(private navParams: NavParams,
     private modalController: ModalController,
     private authServerProvider: AuthServerProvider,
-    private eventoService: EventoService) { }
+    private alertController: AlertController,
+    private eventoService: EventoService) { 
+      this.evento = this.navParams.get('evento');
+      this.editable = this.navParams.get('editable');
+      
+      let _data = new Date();
+      if(this.evento.idevento){
+         _data = new Date(this.evento.dataregistro);
+         if(this.evento.grupoevento){
+         this.grupoSelected = this.evento.grupoevento;
+         this.subgrupos = this.eventorotina.getRotinas(this.grupoSelected);
+         }
+         if(this.evento.subgrupoevento){
+           this.subgrupoSelected = this.evento.subgrupoevento;
+         }
+       }
+       _data.setHours(_data.getHours() - (_data.getTimezoneOffset() / 60));
+       this.datahora = _data.toISOString();
+       
+     this.grupoEventos = this.eventorotina.getDescricaoEvento();
+
+    }
 
   ngOnInit() {
-   this.evento = this.navParams.get('evento');
-    let _data = new Date();
-    if(this.evento.idevento){
-      _data = new Date(this.evento.dataregistro);
-    }
-    _data.setHours(_data.getHours() - (_data.getTimezoneOffset() / 60));
-    this.datahora = _data.toISOString();
-  this.grupoEventos = this.eventorotina.getDescricaoEvento();
+  
+
+
   }
 
   selectedGrupo(grupoevento: string) {
@@ -59,25 +75,67 @@ export class EventoModalPage implements OnInit {
   fechar(){
     this.modalController.dismiss();
   }
-  delete(){
-    console.log('delete');
+  async delete(){
+    const alert = await this.alertController.create({
+      header: 'Excluir',
+      message: '<strong>Tem certeza?</strong>',
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: (blah) => {
+            console.log('Confirm Cancel: blah');
+          }
+        }, {
+          text: 'Confimar',
+          handler: () => {
+            this.eventoService.delete(this.evento).subscribe(res => {
+              this.modalController.dismiss();
+            }, err => {
+              console.log(err);
+            });
+            console.log('Confirm Okay');
+          }
+        }
+      ]
+    });
+    await alert.present();
+    
   }
 
   salvar(){
+    if(this.evento.idevento){
+      this.update();
+    }else{
+      this.save();
+    }
+    
+  }
+
+  private save(){
     let _data = new Date(this.datahora);
     _data.setHours(_data.getHours() + (_data.getTimezoneOffset() / 60));
    this.evento.dataevento = _data;
     this.evento.dataregistro = _data;
-    //this.evento.usuario = this.authServerProvider.usuario; 
-  /* this.authServerProvider.getUsuario().subscribe(usuario=>{
-      this.evento.usuario = usuario;
-    });*/
+    this.evento.usuario = this.authServerProvider.usuario; 
     this.eventoService.save(this.evento).subscribe(res=>{
       this.modalController.dismiss();
     }, err =>{
         console.log(err.erro);
     })
-    
+  }
+
+  private update(){
+    let _data = new Date(this.datahora);
+    _data.setHours(_data.getHours() + (_data.getTimezoneOffset() / 60));
+    this.evento.dataregistro = _data;
+    this.evento.usuario = this.authServerProvider.usuario; 
+    this.eventoService.update(this.evento).subscribe(res=>{
+      this.modalController.dismiss();
+    }, err =>{
+        console.log(err.erro);
+    })
   }
 
 }

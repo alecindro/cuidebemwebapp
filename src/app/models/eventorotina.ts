@@ -251,7 +251,7 @@ export class EventoRotina {
         { descricao: "Medicação", rotinas: this.medicacao,  icon: "medkit" },
         { descricao: "Interocorrências", rotinas: null,  icon: "alert" },
         { descricao: "Higiene", rotinas: this.higiene,  icon: "body" },
-        { descricao: "Eliminações", rotinas: this.eliminacao,  icon: "exit" },
+        { descricao: "Eliminações", rotinas: this.eliminacao,  icon: "man" },
         { descricao: "Dor", rotinas: null, icon: "sad" },
         { descricao: "Consultas", rotinas: null ,  icon: "clipboard" },
         { descricao: "Bem Estar", rotinas: this.bemestar ,  icon: "happy" },

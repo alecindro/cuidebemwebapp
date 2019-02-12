@@ -6,6 +6,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { ConfiguracoesPage } from './configuracoes.page';
+import { HasAnyAuthorityDirective } from '../shared/has-any-authority.directive';
 
 
 

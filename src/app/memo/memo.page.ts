@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Memorando } from '../models/memorando';
 import { MemorandoService } from '../services/memorando-service';
 import { AuthServerProvider } from '../services/auth-jwt.service';
-import { NavParams, ModalController, Platform } from '@ionic/angular';
+import { NavParams, ModalController, Platform, AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-memo',
@@ -18,6 +18,7 @@ export class MemoPage implements OnInit {
   constructor(private memorandoService: MemorandoService, 
     private navParams: NavParams,public modalController: ModalController,
     private authServerProvider: AuthServerProvider,
+    private alertController: AlertController,
     private platform: Platform) { }
 
   ngOnInit() {
@@ -52,9 +53,7 @@ export class MemoPage implements OnInit {
 
   salvar(){
     this.memorando.dataregistro = new Date();
-     /* this.authServerProvider.getUsuario().subscribe(usuario =>{
-        this.memorando.usuario = usuario;
-      });*/ 
+        this.memorando.usuario = this.authServerProvider.usuario;
     this.memorandoService.save(this.memorando).subscribe(res => {
       this.memorando = res.body;
       this.modalController.dismiss();
@@ -63,9 +62,7 @@ export class MemoPage implements OnInit {
 
   update(){
     this.memorando.dataalteracao = new Date();
-   /* this.authServerProvider.getUsuario().subscribe(usuario =>{
-      this.memorando.usuario = usuario;
-    });*/  
+    this.memorando.usuario = this.authServerProvider.usuario;
     this.memorandoService.update(this.memorando).subscribe(res => {
       this.memorando = res.body;
       this.modalController.dismiss();
@@ -74,8 +71,35 @@ export class MemoPage implements OnInit {
   fechar(){
     this.modalController.dismiss();
   }
-  delete(){
-    console.log('delete');
+  async delete(){    
+    const alert = await this.alertController.create({
+      header: 'Excluir',
+      message: '<strong>Tem certeza?</strong>',
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: (blah) => {
+            console.log('Confirm Cancel: blah');
+          }
+        }, {
+          text: 'Confimar',
+          handler: () => {
+            this.memorandoService.delete(this.memorando.idmemorando).subscribe(res => {
+              this.modalController.dismiss();
+            }, err => {
+              console.log(err);
+            });
+            console.log('Confirm Okay');
+          }
+        }
+      ]
+    });
+    await alert.present();
+    
   }
+  
+
 
 }

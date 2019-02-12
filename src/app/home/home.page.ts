@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { LoadingController, ModalController} from '@ionic/angular';
 import { Loading } from '../shared/loading';
 import { PacienteDTO } from '../models/pacienteDTO';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 import { CheckinPage } from '../checkin/checkin.page';
 import { PacientedtoService } from '../services/pacientedto-service';
 
@@ -18,7 +18,7 @@ export class HomePage  implements OnInit{
   searchText = '';
   filteredList : Array<PacienteDTO>= [];
   pacienteDTOS : Array<PacienteDTO>= [];
-  pacienteDTO: PacienteDTO;
+  checkin: boolean = true;  
 
   constructor(
     private pacientedtoService: PacientedtoService,
@@ -52,7 +52,7 @@ export class HomePage  implements OnInit{
     this.filteredList = this.pacienteDTOS.filter(c => {
       return c.paciente.nome.toLocaleLowerCase().indexOf(text) >-1 ||
       c.paciente.apelido.toLocaleLowerCase().indexOf(text) > -1;
-      //const fc = Object.assign({}, c);
+      //const fc = Object.assign({}, c);!this.clickPaciente
       //delete fc.createdAt;            //ignore createdAt
       //return JSON.stringify(fc).toLowerCase().indexOf(text) > -1;
     })};
@@ -64,31 +64,36 @@ export class HomePage  implements OnInit{
 
 
   clickPaciente(pacienteDTO){
-    this.pacienteDTO = pacienteDTO;
     if(pacienteDTO.checkin){
-    this.detailPaciente();
+    this.detailPaciente(pacienteDTO);
     }else{
-      this.presentModal();
+     pacienteDTO.checkin = true;
     }
   }
 
-  async presentModal() {
+   onChange(pacienteDTO){
+    console.log("checkin change"); 
+    if(this.checkin){
+       this.checkin = !this.checkin;
+       this.presentModal(pacienteDTO);
+     }
+   }
+
+  async presentModal(pacienteDTO) {
     const modal = await this.modalCtrl.create({
       component: CheckinPage,
-      componentProps: { pacienteDTO: this.pacienteDTO }
+      componentProps: { pacienteDTO: pacienteDTO }
     });
     modal.onDidDismiss()
-    .then((data) => {
-      if(data){
-      this.pacienteDTO = data['data'];
-      }
+    .then(() => {
+      this.checkin = ! this.checkin;
   });
     return await modal.present();
   }
 
 
-  async detailPaciente(){
-    this.pacientedtoService.pacienteDTO = this.pacienteDTO;
+  async detailPaciente(pacienteDTO){
+    this.pacientedtoService.pacienteDTO = pacienteDTO;
     this.router.navigateByUrl("/details/tabs/(eventos:eventos)",{skipLocationChange: true});
   }
 

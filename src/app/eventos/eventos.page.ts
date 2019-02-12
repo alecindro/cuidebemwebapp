@@ -9,10 +9,8 @@ import { OverlayEventDetail } from "@ionic/core";
 import { MemoPage } from "../memo/memo.page";
 import { Router } from "@angular/router";
 import { PhotoModalPage } from "../photo-modal/photo-modal.page";
-import { PacientePhotoService } from "../services/pacientephoto-service";
 import { PacientePhoto } from "../models/paciente-photo";
 import { AuthServerProvider } from "../services/auth-jwt.service";
-import { PhotoDTO } from "../photo-modal/photo-dto";
 import { Evento } from "../models/evento";
 import { EventoModalPage } from "../evento-modal/evento-modal.page";
 import { Usuario } from "../models/usuario";
@@ -27,19 +25,19 @@ export class EventosPage implements OnInit {
   timelines: Array<Timeline> = new Array<Timeline>();
   pacientedto: PacienteDTO;
   eventoRotina: EventoRotina = new EventoRotina();
-  usuario: Usuario;
+  grupoEventos: string[];
+  
 
   constructor(
     private timelineService: TimelineService,
     private pacientedtoService: PacientedtoService,
     private modalController: ModalController,
     private router: Router,
-    private pacientePhotoService: PacientePhotoService,
     private authServerProvider: AuthServerProvider
   ) {}
 
   ngOnInit() {
-    console.log("TAB EVENTO");
+    this.grupoEventos = this.eventoRotina.getDescricaoEvento();
     this.pacientedto = this.pacientedtoService.pacienteDTO;
     this.loadTimeline();
   }
@@ -62,16 +60,15 @@ export class EventosPage implements OnInit {
 
   private editable(usuario: Usuario): boolean {
     let editable = false;
-     this.authServerProvider.user().then(login => {
-      if (login === usuario.login) {
+      if (this.authServerProvider.usuario.login === usuario.login) {
         editable = true;
       }
-    });
     return editable;
   }
 
   async editEvento(evento: Evento) {
     let editable = this.editable(evento.usuario);
+    evento.paciente = this.pacientedto.paciente;
     const modalEvento = await this.modalController.create({
       component: EventoModalPage,
       componentProps: {
@@ -132,61 +129,39 @@ export class EventosPage implements OnInit {
     });
   }
   async addPhoto() {
-    let photodto = new PhotoDTO();
+    let pacientePhoto = new PacientePhoto();
+    pacientePhoto.paciente = this.pacientedto.paciente;
+    pacientePhoto.usuario = this.authServerProvider.usuario;
+    
     const modalPhoto = await this.modalController.create({
       component: PhotoModalPage,
       componentProps: {
-        photodto: photodto
+        pacientePhoto: pacientePhoto,
+        editable: false
       }
     });
     await modalPhoto.present();
     await modalPhoto.onDidDismiss().then((data: OverlayEventDetail) => {
       if (data.data) {
-        let photodto: PhotoDTO = data.data;
-        let pacientePhoto = new PacientePhoto();
-        pacientePhoto.descricao = photodto.descricao;
-        pacientePhoto.photo = photodto.photo;
-        pacientePhoto.dataregistro = new Date();
-        pacientePhoto.paciente = this.pacientedto.paciente;
-     /*   this.authServerProvider.usuario().then(usuario => {
-          pacientePhoto.usuario = usuario;
-        });*/
-        /*this.authServerProvider.getUsuario().then(usuario =>{
-        pacientePhoto.usuario = usuario;
-       })*/
-        pacientePhoto.principal = false;
-        this.pacientePhotoService.save(pacientePhoto).subscribe(
-          res => {
-            this.loadTimeline();
-          },
-          err => {
-            console.log(err.error);
-          }
-        );
+        this.loadTimeline();
       }
     });
   }
 
   async editPhoto(pacientePhoto: PacientePhoto) {
-    let photodto = new PhotoDTO();
-    photodto.descricao = pacientePhoto.descricao;
-    photodto.photo = pacientePhoto.photo;
+    pacientePhoto.paciente = this.pacientedto.paciente;
     const modalPhoto = await this.modalController.create({
       component: PhotoModalPage,
       componentProps: {
-        photodto: photodto,
+        pacientePhoto: pacientePhoto,
         editable: this.editable(pacientePhoto.usuario)
       }
     });
     await modalPhoto.present();
     await modalPhoto.onDidDismiss().then((data: OverlayEventDetail) => {
       if (data.data) {
-        photodto = data.data;
-        pacientePhoto.descricao = photodto.descricao;
-        pacientePhoto.photo = photodto.photo;
-        this.pacientePhotoService.update(pacientePhoto).subscribe(res => {
           this.loadTimeline();
-        });
+        
       }
     });
   }

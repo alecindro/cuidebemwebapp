@@ -9,17 +9,18 @@
 
 <ion-content padding color="light">
     <ion-grid fixed="true">
-        <ion-row >
-          <ion-col ><ion-button color="primary" strong="true" expand="block" (click)='pacientes()'>Pacientes</ion-button></ion-col>
+      
+        <ion-row *jhiHasAnyAuthority="['ROLE_ADMIN','ROLE_CAD_PACIENTE']">
+          <ion-col ><ion-button color="primary" strong="true"  expand="block" (click)='pacientes()'>Pacientes</ion-button></ion-col>
         </ion-row>
-        <ion-row>
-            <ion-col><ion-button color="primary" strong="true"  expand="block" (click)='responsaveis()'>Responsáveis</ion-button></ion-col>
+        <ion-row *jhiHasAnyAuthority="['ROLE_ADMIN','ROLE_CAD_RESPONSAVEL']">
+            <ion-col><ion-button color="primary" strong="true"  expand="block" (click)='responsaveis()' >Responsáveis</ion-button></ion-col>
           </ion-row>
-          <ion-row>
-              <ion-col><ion-button color="primary"  strong="true" expand="block" (click)='agendas()'>Agendas</ion-button></ion-col>
+          <ion-row *jhiHasAnyAuthority="['ROLE_ADMIN','ROLE_CAD_AGENDA']">
+              <ion-col><ion-button color="primary"  strong="true" expand="block" (click)='agendas()' >Agendas</ion-button></ion-col>
             </ion-row>
-            <ion-row>
-                <ion-col><ion-button color="primary" strong="true" expand="block" (click)='usuarios()'>Usuários</ion-button></ion-col>
+            <ion-row *jhiHasAnyAuthority="['ROLE_ADMIN','ROLE_CAD_USER']">
+                <ion-col><ion-button color="primary" strong="true" expand="block" (click)='usuarios()' >Usuários</ion-button></ion-col>
               </ion-row>
       </ion-grid>
 </ion-content>

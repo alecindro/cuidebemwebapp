@@ -16,4 +16,13 @@ export class EventoService{
     save(evento:Evento): Observable<HttpResponse<any>>{
         return this.api.post("api/eventos",evento);
     }
+
+    update(evento:Evento): Observable<HttpResponse<any>>{
+        return this.api.put("api/eventos",evento);
+    }
+
+    delete(evento:Evento): Observable<HttpResponse<any>>{
+        evento.enabled = false;
+        return this.api.put("api/eventos",evento);
+    }
 }

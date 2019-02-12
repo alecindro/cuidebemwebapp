@@ -20,7 +20,7 @@ export  class PacientePhotoService{
     }
   
     delete(pacientePhoto: PacientePhoto): Observable<HttpResponse<any>> {
-         return this.api.delete("api/pacientephotos"+pacientePhoto.idpacientephoto);
+         return this.api.delete("api/pacientephotos/"+pacientePhoto.idpacientephoto);
     }
 
 }

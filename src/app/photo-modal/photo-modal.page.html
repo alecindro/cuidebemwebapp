@@ -6,31 +6,35 @@
         </ion-button>
     </ion-buttons>
     <ion-title>Foto</ion-title>
-  
+    <ion-buttons slot="end">
+      <ion-button (click)="delete()" [disabled]="!editable">
+          <ion-icon slot="icon-only" name="trash"></ion-icon>
+        </ion-button>
+  </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content padding>
-  <input type="file" (change)="atualizaArquivo($event)" id="file" hidden />
+  <input type="file" (change)="atualizaArquivo($event)" id="file" hidden /> 
   <ion-grid>
     <ion-row>
       <ion-col >
         <div (click)="loadPhoto()" style="cursor: pointer">
-          <ion-img [src]="photodto.photo" name="photo" *ngIf="photodto.photo" class="avatar"></ion-img>
-          <ion-img src="../../assets/imgs/rsz_1no-avatar.jpg" name="photo" class="avatar" *ngIf="!photodto.photo"></ion-img>
+          <ion-img [src]="pacientePhoto.photo" name="photo" *ngIf="pacientePhoto.photo" class="avatar"></ion-img>
+          <ion-img src="../../assets/imgs/rsz_1no-avatar.jpg" name="photo" class="avatar" *ngIf="!pacientePhoto.photo"></ion-img>
         </div>
       </ion-col>
     </ion-row>
     <ion-row>
       <ion-col >
         <ion-label position="floating">Descrição</ion-label>
-    <ion-textarea [(ngModel)]="photodto.descricao"></ion-textarea>
+    <ion-textarea [(ngModel)]="pacientePhoto.descricao"></ion-textarea>
       </ion-col>
     </ion-row>
     
     <ion-row>
       <ion-col>
-        <ion-button color="primary" strong="true" expand="block" (click)="salvar()" [disabled]="!photodto.photo">Salvar</ion-button>
+        <ion-button color="primary" strong="true" expand="block" (click)="salvar()" [disabled]="!pacientePhoto.photo" [hidden]="!editable">Salvar</ion-button>
       </ion-col>
     </ion-row>
     </ion-grid>
