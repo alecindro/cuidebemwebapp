@@ -13,6 +13,5 @@ export class TabsPage implements OnInit {
   }
  
   tab2Selected() {
-    console.log('My tab was selected!');
   }
 }

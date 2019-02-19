@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthServerProvider } from '../services/auth-jwt.service';
 import { UsuarioService } from '../services/usuario-service';
 import { Usuario } from '../models/usuario';
-import { Platform, LoadingController, AlertController } from '@ionic/angular';
+import { Platform, LoadingController, AlertController, ToastController } from '@ionic/angular';
 import { UsuarioPhoto } from '../models/usuariophoto';
 import { Camera, CameraOptions, PictureSourceType } from '@ionic-native/camera/ngx';
 import { UsuarioTelefone } from '../models/usuariotelefone';
@@ -32,7 +32,8 @@ feminino: boolean = false;
     private platform: Platform,
     private camera: Camera,
     private loadingController: LoadingController,
-    private alertController: AlertController) { 
+    private alertController: AlertController,
+    public toastController: ToastController) { 
       this.mobile = false;
     if (this.platform.is('ios') || this.platform.is('android')) {
       this.mobile = true;
@@ -129,7 +130,7 @@ feminino: boolean = false;
       this.changefoto = true;
       this.camera.cleanup();
     }, (err) => {
-      console.log(err);
+      this.presentToast(err.error);
     });
   }
 
@@ -143,7 +144,7 @@ feminino: boolean = false;
 
       },
       err => {
-        console.log(err);
+        this.presentToast(err.error);
       } 
       )      
     });
@@ -232,5 +233,14 @@ feminino: boolean = false;
     });
 
     await alert.present();
+  }
+
+  async presentToast(error: string) {
+    const toast = await this.toastController.create({
+      message: error,
+      duration: 2000,
+      position: "middle"
+    });
+    toast.present();
   }
 }

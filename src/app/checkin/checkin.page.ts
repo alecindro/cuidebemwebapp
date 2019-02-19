@@ -1,6 +1,6 @@
 import { Component, OnInit} from '@angular/core';
 import { PacienteDTO } from '../models/pacienteDTO';
-import { ModalController, NavParams } from '@ionic/angular';
+import { ModalController, NavParams, ToastController } from '@ionic/angular';
 import { Evento } from '../models/evento';
 import { AuthServerProvider } from '../services/auth-jwt.service';
 import { EventoService } from '../services/evento-service';
@@ -22,7 +22,8 @@ export class CheckinPage implements OnInit {
   constructor(private modalCtrl:ModalController,
      private eventoService: EventoService,
      private navParams: NavParams , 
-     private authServerProvider: AuthServerProvider) { }
+     private authServerProvider: AuthServerProvider,
+     private toastController: ToastController) { }
 
   ngOnInit() {
     this.pacienteDTO = this.navParams.get("pacienteDTO");
@@ -31,7 +32,6 @@ export class CheckinPage implements OnInit {
     this.evento.dataregistro = new Date();
     this.evento.paciente = this.pacienteDTO.paciente;
     this.evento.enabled = true;
-    console.log("Estado paciente " + this.pacienteDTO.checkin);
     if(this.pacienteDTO.checkin){
       this.evento.grupoevento = this.CHECKIN;
     } else{
@@ -48,14 +48,22 @@ export class CheckinPage implements OnInit {
     _data.setHours(_data.getHours() + (_data.getTimezoneOffset() / 60));
    this.evento.dataevento = _data;
     this.eventoService.save(this.evento).subscribe(res => {
-      this.modalCtrl.dismiss();    
+      this.modalCtrl.dismiss("Registro efetuado com sucesso.");    
     }, err => {
-      console.log(err.error);
+      this.presentToast(err.error);
     })
   }
   fechar(){
     this.pacienteDTO.checkin = !this.pacienteDTO.checkin; 
     this.modalCtrl.dismiss();
+  }
+
+  async presentToast(message:string) {
+    const toast = await this.toastController.create({
+      message: message,
+      duration: 2000
+    });
+    toast.present();
   }
 
 }

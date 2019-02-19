@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { LoadingController, ModalController} from '@ionic/angular';
+import { LoadingController, ModalController, ToastController} from '@ionic/angular';
 import { Loading } from '../shared/loading';
 import { PacienteDTO } from '../models/pacienteDTO';
 import { Router } from '@angular/router';
 import { CheckinPage } from '../checkin/checkin.page';
 import { PacientedtoService } from '../services/pacientedto-service';
+import { OverlayEventDetail } from '@ionic/core';
 
 
 @Component({
@@ -23,11 +24,21 @@ export class HomePage  implements OnInit{
   constructor(
     private pacientedtoService: PacientedtoService,
     private router: Router,
-    public modalCtrl: ModalController){
+    public modalCtrl: ModalController,
+    private loadingController: LoadingController,
+    private toastController: ToastController){
    
   }
   ngOnInit() {
-    
+    this.initPacientes();
+   }
+  
+
+  private async initPacientes(){
+    const loading = await this.loadingController.create({
+      message: 'Carregando ...'
+    });
+    await loading.present();
     this.pacientedtoService.getPacientes().subscribe((response)=>{
 
       this.pacienteDTOS = response.body;
@@ -38,11 +49,14 @@ export class HomePage  implements OnInit{
         this.filteredList.push(pacientedto);
       } 
       this.pacienteDTOS = this.filteredList;
-    },error => {
-      console.log(error);
+      loading.dismiss();
+    },err => {
+      loading.dismiss();
+      this.presentToast(err.error);
       }
     )
   }
+
 
   async search() {
     const text = this.searchText.toLowerCase().trim();
@@ -52,9 +66,6 @@ export class HomePage  implements OnInit{
     this.filteredList = this.pacienteDTOS.filter(c => {
       return c.paciente.nome.toLocaleLowerCase().indexOf(text) >-1 ||
       c.paciente.apelido.toLocaleLowerCase().indexOf(text) > -1;
-      //const fc = Object.assign({}, c);!this.clickPaciente
-      //delete fc.createdAt;            //ignore createdAt
-      //return JSON.stringify(fc).toLowerCase().indexOf(text) > -1;
     })};
   }
 
@@ -72,7 +83,6 @@ export class HomePage  implements OnInit{
   }
 
    onChange(pacienteDTO){
-    console.log("checkin change"); 
     if(this.checkin){
        this.checkin = !this.checkin;
        this.presentModal(pacienteDTO);
@@ -85,8 +95,11 @@ export class HomePage  implements OnInit{
       componentProps: { pacienteDTO: pacienteDTO }
     });
     modal.onDidDismiss()
-    .then(() => {
+    .then((data: OverlayEventDetail) => {
       this.checkin = ! this.checkin;
+      if(data.data){
+      this.presentToast(data.data);
+      }
   });
     return await modal.present();
   }
@@ -95,6 +108,15 @@ export class HomePage  implements OnInit{
   async detailPaciente(pacienteDTO){
     this.pacientedtoService.pacienteDTO = pacienteDTO;
     this.router.navigateByUrl("/details/tabs/(eventos:eventos)",{skipLocationChange: true});
+  }
+
+
+  async presentToast(message:string) {
+    const toast = await this.toastController.create({
+      message: message,
+      duration: 2000
+    });
+    toast.present();
   }
 
 

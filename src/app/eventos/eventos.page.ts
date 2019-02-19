@@ -1,10 +1,10 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ViewChild } from "@angular/core";
 import { Timeline } from "../models/timeline";
 import { TimelineService } from "../services/timeline-service";
 import { PacientedtoService } from "../services/pacientedto-service";
 import { PacienteDTO } from "../models/pacienteDTO";
 import { Memorando } from "../models/memorando";
-import { ModalController } from "@ionic/angular";
+import { ModalController, LoadingController, ToastController } from "@ionic/angular";
 import { OverlayEventDetail } from "@ionic/core";
 import { MemoPage } from "../memo/memo.page";
 import { Router } from "@angular/router";
@@ -26,14 +26,20 @@ export class EventosPage implements OnInit {
   pacientedto: PacienteDTO;
   eventoRotina: EventoRotina = new EventoRotina();
   grupoEventos: string[];
+  page:number = 0;
+  disableLoad:boolean = false;
+  
+  
   
 
   constructor(
     private timelineService: TimelineService,
     private pacientedtoService: PacientedtoService,
     private modalController: ModalController,
+    private loadingController: LoadingController,
     private router: Router,
-    private authServerProvider: AuthServerProvider
+    private authServerProvider: AuthServerProvider,
+    private toastController: ToastController
   ) {}
 
   ngOnInit() {
@@ -53,6 +59,7 @@ export class EventosPage implements OnInit {
     await modalEvento.present();
     await modalEvento.onDidDismiss().then((data: OverlayEventDetail) => {
       if (data.data) {
+        this.presentToast(data.data);
         this.loadTimeline();
       }
     });
@@ -79,18 +86,30 @@ export class EventosPage implements OnInit {
     await modalEvento.present();
     await modalEvento.onDidDismiss().then((data: OverlayEventDetail) => {
       if (data.data) {
+        this.presentToast(data.data)
         this.loadTimeline();
       }
     });
   }
 
-  private loadTimeline() {
-    this.timelineService.get(this.pacientedto.paciente.idpaciente).subscribe(
+  private async loadTimeline() {
+    const loading = await this.loadingController.create({
+      message: 'Carregando ...'
+    });
+    await loading.present();
+
+    this.timelineService.get(this.pacientedto.paciente.idpaciente,this.page).subscribe(
       res => {
-        this.timelines = res.body;
+        let _timelines  = res.body;
+        if(_timelines.length == 0){
+          this.disableLoad = true;
+        }
+        this.timelines = this.timelines.concat(_timelines);
+        loading.dismiss();
       },
       err => {
-        console.log(err.error);
+        this.presentToast(err.error);
+        loading.dismiss();
       }
     );
   }
@@ -101,29 +120,43 @@ export class EventosPage implements OnInit {
     const modalMemorando = await this.modalController.create({
       component: MemoPage,
       componentProps: {
-        memorando: memorando
+        memorando: memorando,
+        editable: true,
+        deletable: false
       }
     });
     await modalMemorando.present();
     await modalMemorando.onDidDismiss().then((data: OverlayEventDetail) => {
       if (data.data) {
+        this.presentToast(data.data);
         this.loadTimeline();
       }
     });
   }
 
+  async presentToast(message:string) {
+    const toast = await this.toastController.create({
+      message: message,
+      duration: 2000
+    });
+    toast.present();
+  }
+
   async editMemorando(memorando: Memorando) {
     memorando.paciente = this.pacientedto.paciente;
+    let editable = this.editable(memorando.usuario);
     const modalMemorando = await this.modalController.create({
       component: MemoPage,
       componentProps: {
         memorando: memorando,
-        editable: this.editable(memorando.usuario)
+        editable: editable,
+        deletable: editable
       }
     });
     await modalMemorando.present();
     await modalMemorando.onDidDismiss().then((data: OverlayEventDetail) => {
       if (data.data) {
+        this.presentToast(data.data);
         this.loadTimeline();
       }
     });
@@ -137,29 +170,34 @@ export class EventosPage implements OnInit {
       component: PhotoModalPage,
       componentProps: {
         pacientePhoto: pacientePhoto,
-        editable: false
+        editable: true,
+        deletable: false
       }
     });
     await modalPhoto.present();
     await modalPhoto.onDidDismiss().then((data: OverlayEventDetail) => {
       if (data.data) {
+        this.presentToast(data.data)
         this.loadTimeline();
       }
     });
   }
 
   async editPhoto(pacientePhoto: PacientePhoto) {
+    let editable = this.editable(pacientePhoto.usuario);
     pacientePhoto.paciente = this.pacientedto.paciente;
     const modalPhoto = await this.modalController.create({
       component: PhotoModalPage,
       componentProps: {
         pacientePhoto: pacientePhoto,
-        editable: this.editable(pacientePhoto.usuario)
+        editable: editable,
+        deletable: editable
       }
     });
     await modalPhoto.present();
     await modalPhoto.onDidDismiss().then((data: OverlayEventDetail) => {
       if (data.data) {
+        this.presentToast(data.data);
           this.loadTimeline();
         
       }
@@ -168,5 +206,22 @@ export class EventosPage implements OnInit {
 
   voltar() {
     this.router.navigate(["home"]);
+  }
+
+  loadData(event) {
+    this.page = this.page +1;
+    this.loadTimeline().then( res =>{  
+      event.target.complete();
+      if(this.disableLoad){
+        event.target.disabled = true;
+      }
+    });
+
+      // App logic to determine if all data is loaded
+      // and disable the infinite scroll
+      /*if (data.length == 1000) {
+        event.target.disabled = true;
+      }*/
+    
   }
 }

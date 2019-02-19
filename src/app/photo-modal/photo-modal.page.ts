@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Platform, ModalController, NavParams, AlertController } from '@ionic/angular';
+import { Platform, ModalController, NavParams, AlertController, ToastController } from '@ionic/angular';
 import { Camera, CameraOptions, PictureSourceType } from '@ionic-native/camera/ngx';
 import { PacientePhoto } from '../models/paciente-photo';
 import { PacientePhotoService } from '../services/pacientephoto-service';
@@ -19,7 +19,8 @@ export class PhotoModalPage implements OnInit {
     public modalController: ModalController,
     private pacientePhotoService: PacientePhotoService,
     private alertController: AlertController,
-    private navParams: NavParams) { }
+    private navParams: NavParams,
+    private toastController: ToastController) { }
 
   ngOnInit() {
     this.pacientePhoto = this.navParams.get('pacientePhoto');
@@ -49,7 +50,7 @@ export class PhotoModalPage implements OnInit {
       this.pacientePhoto.photo = base64Image;
       this.camera.cleanup();
     }, (err) => {
-      console.log(err);
+      this.presentToast(err.error);
     });
   }
 
@@ -79,10 +80,10 @@ export class PhotoModalPage implements OnInit {
     this.pacientePhoto.principal = false;
     this.pacientePhotoService.update(this.pacientePhoto).subscribe(
       res => {
-        this.modalController.dismiss();
+        this.modalController.dismiss("Foto atualizada com sucesso.");
       },
       err => {
-        console.log(err.error);
+        this.presentToast(err.error);
       }
     );
   }
@@ -92,22 +93,10 @@ export class PhotoModalPage implements OnInit {
     this.pacientePhoto.principal = false;
     this.pacientePhotoService.save(this.pacientePhoto).subscribe(
       res => {
-        this.modalController.dismiss();
+        this.modalController.dismiss("Foto registrada com sucesso.");
       },
       err => {
-        console.log(err.error);
-      }
-    );
-  }
-
-  excluir(){
-
-    this.pacientePhotoService.delete(this.pacientePhoto).subscribe(
-      res => {
-        this.modalController.dismiss();
-      },
-      err => {
-        console.log(err.error);
+        this.presentToast(err.error);
       }
     );
   }
@@ -122,17 +111,15 @@ export class PhotoModalPage implements OnInit {
           role: 'cancel',
           cssClass: 'secondary',
           handler: (blah) => {
-            console.log('Confirm Cancel: blah');
           }
         }, {
           text: 'Confimar',
           handler: () => {
             this.pacientePhotoService.delete(this.pacientePhoto).subscribe(res => {
-              this.modalController.dismiss();
+              this.modalController.dismiss("Foto excluída com sucesso.");
             }, err => {
-              console.log(err);
+              this.presentToast(err.error);
             });
-            console.log('Confirm Okay');
           }
         }
       ]
@@ -140,10 +127,15 @@ export class PhotoModalPage implements OnInit {
     await alert.present();
     
   }
-
-
-
   fechar(){
     this.modalController.dismiss();
+  }
+
+  async presentToast(message:string) {
+    const toast = await this.toastController.create({
+      message: message,
+      duration: 2000
+    });
+    toast.present();
   }
 }

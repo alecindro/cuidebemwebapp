@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { LoadingController, Platform, ModalController, AlertController } from '@ionic/angular';
+import { LoadingController, Platform, ModalController, AlertController, ToastController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { Camera, CameraOptions, PictureSourceType } from '@ionic-native/camera/ngx';
 import { ResponsavelPhoto } from '../models/responsavelphoto';
@@ -39,7 +39,8 @@ export class ResponsavelPage implements OnInit {
     private router: Router,
     private camera: Camera,
     private platform: Platform,
-    private alertController: AlertController
+    private alertController: AlertController,
+    public toastController: ToastController
   ) {
     this.mobile = false;
     if (this.platform.is('ios') || this.platform.is('android')) {
@@ -90,8 +91,8 @@ export class ResponsavelPage implements OnInit {
         loading.dismiss();
         this.router.navigate(['responsaveis']);
       }, err => {
-        console.log(err);
         loading.dismiss();
+        this.presentToast(err.error);
       });
   }
 
@@ -102,7 +103,7 @@ export class ResponsavelPage implements OnInit {
       this.responsavelPhoto = res.body;
       this.changefoto = false;
     }, err => {
-      console.log(err);
+      this.presentToast(err.error);
     });
   }
   }
@@ -116,8 +117,8 @@ export class ResponsavelPage implements OnInit {
       this.router.navigate(['responsaveis']);
       loading.dismiss();
     }, err => {
-      console.log(err);
       loading.dismiss();
+      this.presentToast(err.error);
     });
   }
 
@@ -157,7 +158,7 @@ export class ResponsavelPage implements OnInit {
       this.changefoto = true;
       this.camera.cleanup();
     }, (err) => {
-      console.log(err);
+      this.presentToast(err.error);
     });
   }
 
@@ -181,7 +182,7 @@ export class ResponsavelPage implements OnInit {
     this.responsavelTelefoneService.saveDTO(this.responsavelTelefoneList).subscribe(res => {
       this.responsavelTelefoneList = res.body;
     }, err => {
-      console.log(err);
+      this.presentToast(err.error);
     })
   }
   }
@@ -194,7 +195,7 @@ export class ResponsavelPage implements OnInit {
           return e1.telefone.idtelefone !== responsavelTelefone.telefone.idtelefone
         });
       }, err => {
-        console.log(err);
+        this.presentToast(err.error);
       });
     } else {
       this.responsavelTelefones = this.responsavelTelefones.filter(e1 => {
@@ -221,7 +222,6 @@ export class ResponsavelPage implements OnInit {
           role: 'cancel',
           cssClass: 'secondary',
           handler: (blah) => {
-            console.log('Confirm Cancel: blah');
           }
         }, {
           text: 'Confirmar',
@@ -229,9 +229,8 @@ export class ResponsavelPage implements OnInit {
             this.responsavelService.delete(this.responsavelPaciente.responsavel).subscribe(res => {
               this.router.navigate(['responsaveis']);
             }, err => {
-              console.log(err);
+              this.presentToast(err.error);
             });
-            console.log('Confirm Okay');
           }
         }
       ]
@@ -239,5 +238,12 @@ export class ResponsavelPage implements OnInit {
     await alert.present();
   }
 
-
+  async presentToast(error: string) {
+    const toast = await this.toastController.create({
+      message: error,
+      duration: 2000,
+      position: "middle"
+    });
+    toast.present();
+  }
 }

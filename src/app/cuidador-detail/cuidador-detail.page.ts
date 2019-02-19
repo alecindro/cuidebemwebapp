@@ -4,7 +4,7 @@ import { Usuario } from '../models/usuario';
 import { UsuarioService } from '../services/usuario-service';
 import { UsuarioPhoto } from '../models/usuariophoto';
 import { Telefone } from '../models/telefone';
-import { Platform, LoadingController, AlertController } from '@ionic/angular';
+import { Platform, LoadingController, AlertController, ToastController } from '@ionic/angular';
 import { Camera, CameraOptions, PictureSourceType } from '@ionic-native/camera/ngx';
 import { UsuarioTelefone } from '../models/usuariotelefone';
 import { UsuarioTelefoneService } from '../services/usuarioTelefone-service';
@@ -15,7 +15,6 @@ import { AuthServerProvider } from '../services/auth-jwt.service';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { HttpResponse } from '@angular/common/http';
-import { ignoreElements } from 'rxjs/operators';
 import { UsuarioTelefoneList } from '../models/usuarioTelefoneList';
 
 @Component({
@@ -46,7 +45,8 @@ export class CuidadorDetailPage implements OnInit {
     private platform: Platform,
     private camera: Camera,
     private loadingController: LoadingController,
-    private route: Router) {
+    private route: Router,
+    private toastController: ToastController) {
     this.mobile = false;
     if (this.platform.is('ios') || this.platform.is('android')) {
       this.mobile = true;
@@ -81,7 +81,7 @@ export class CuidadorDetailPage implements OnInit {
         this.usuarioTelefones = res.body;
       },
         err => {
-          console.log(err.error);
+          this.presentToast(err.error);
         });
     }
   }
@@ -107,7 +107,7 @@ export class CuidadorDetailPage implements OnInit {
         this.route.navigate(['usuarios']);
       })
     }, err => {
-      console.log(err.error);
+      this.presentToast(err.error);
     });
   }
   save() {
@@ -197,7 +197,7 @@ export class CuidadorDetailPage implements OnInit {
             this.usuarioTelefones = list.usuarioTelefones;
           },
             err => {
-              console.log(err.error);
+              this.presentToast(err.error);
             });
         }
       });
@@ -312,7 +312,7 @@ export class CuidadorDetailPage implements OnInit {
       this.changefoto = true;
       this.camera.cleanup();
     }, (err) => {
-      console.log(err);
+      this.presentToast(err.error);
     });
   }
 
@@ -352,25 +352,20 @@ export class CuidadorDetailPage implements OnInit {
   }
 
   changeAuthority(entry: AuthorityDTO) {
-    console.log("Antes: "+ this.userDTO.authorities);
-
     if (entry.selected) {
       if (entry.authority_name === Authority.ROLE_ADMIN) {
         for (let aut of this.authorityDTOs) {
           aut.selected = true;
         }
       } 
-      console.log("Contais: "+ this.userDTO.authorities.indexOf(entry.authority));
       if(this.userDTO.authorities.indexOf(entry.authority) == -1){
       this.userDTO.authorities.push(entry.authority);
       }
         
     } else{
       let index = this.userDTO.authorities.indexOf(entry.authority);
-      console.log("Removeu "+index+" role "+ entry.authority);
       this.userDTO.authorities.splice(index,1);
     }
-    console.log("Depois: "+ this.userDTO.authorities);
   }
 
   generateAuthority(authority: Array<string>) {
@@ -394,5 +389,13 @@ export class CuidadorDetailPage implements OnInit {
     this.userDTO.email = this.usuario.email;
     this.userDTO.firstName = this.usuario.nome;
     this.userDTO.activated = this.usuario.enabled;
+  }
+
+  async presentToast(message:string) {
+    const toast = await this.toastController.create({
+      message: message,
+      duration: 2000
+    });
+    toast.present();
   }
 }

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Platform, NavController, LoadingController, AlertController } from '@ionic/angular';
+import { Platform, NavController, LoadingController, AlertController, ToastController } from '@ionic/angular';
 import { PacienteDTO } from 'src/app/models/pacienteDTO';
 import { PacientedtoService } from 'src/app/services/pacientedto-service';
 import { Patologias } from 'src/app/models/patologias';
@@ -30,7 +30,8 @@ export class PacientePage implements OnInit {
     private camera: Camera,
     private nav : NavController,
     private platform: Platform,
-    private alertController: AlertController
+    private alertController: AlertController,
+    private toastController: ToastController
     ) {
     this.mobile = false;
     if (this.platform.is('ios') || this.platform.is('android')) {
@@ -92,7 +93,7 @@ export class PacientePage implements OnInit {
       this.pacienteDTO.photo = base64Image;
       this.camera.cleanup();
     }, (err) => {
-      console.log(err);
+      this.presentToast(err.error);
     });
   }
 
@@ -112,8 +113,8 @@ export class PacientePage implements OnInit {
       loading.dismiss();
       this.router.navigate(['/pacientes'],{ relativeTo: this.route });
     }, err => {
-      console.log(err);
       loading.dismiss();
+      this.presentToast(err.error);
     });
     
   }
@@ -135,7 +136,6 @@ export class PacientePage implements OnInit {
           role: 'cancel',
           cssClass: 'secondary',
           handler: (blah) => {
-            console.log('Confirm Cancel: blah');
           }
         }, {
           text: 'Confimar',
@@ -143,15 +143,22 @@ export class PacientePage implements OnInit {
             this.pacientedtoService.delete(this.pacienteDTO.paciente.idpaciente).subscribe(res => {
               this.router.navigate(['pacientes']);
             }, err => {
-              console.log(err);
+              this.presentToast(err.error);
             });
-            console.log('Confirm Okay');
           }
         }
       ]
     });
     await alert.present();
     
+  }
+
+  async presentToast(message:string) {
+    const toast = await this.toastController.create({
+      message: message,
+      duration: 2000
+    });
+    toast.present();
   }
 
 }

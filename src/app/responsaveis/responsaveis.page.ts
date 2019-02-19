@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { PacientedtoService } from '../services/pacientedto-service';
-import { LoadingController } from '@ionic/angular';
+import { LoadingController, ToastController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { PacienteDTO } from '../models/pacienteDTO';
 import { ResponsavelPaciente } from '../models/responsavelpaciente';
@@ -24,7 +24,8 @@ export class ResponsaveisPage implements OnInit {
     private pacientedtoService: PacientedtoService,
     private responsavelService: ResponsavelService,
     private responsavelPacienteService: ResponsavelPacienteService,
-    private router: Router
+    private router: Router,
+    public toastController: ToastController
   ) { }
 
   ngOnInit() {
@@ -45,12 +46,11 @@ export class ResponsaveisPage implements OnInit {
         this.pacienteDTOS = res.body;
         loading.dismiss();
       }, err => {
-        console.log(err);
         loading.dismiss();
+        this.presentToast(err.error);
       });
   }
   changePaciente() {
-    console.log("paciente " + this.paciente.idpaciente);
     this.selectedPaciente = true;
     this.loadResponsavel();
   }
@@ -65,8 +65,8 @@ export class ResponsaveisPage implements OnInit {
         this.responsaveis = res.body;
         loading.dismiss();
       }, err => {
-        console.log(err);
         loading.dismiss();
+        this.presentToast(err.error);
       });
   }
 
@@ -81,12 +81,14 @@ export class ResponsaveisPage implements OnInit {
         responsavelPaciente.responsavel = responsavel;
         responsavelPaciente.paciente = this.paciente;
         this.responsavelService.responsavelPaciente = responsavelPaciente;
+        loading.dismiss();
         this.router.navigate(['responsavel']);
       }, 
       err => {
-        console.log(err);
+        loading.dismiss();
+        this.presentToast(err.error);
       });
-      loading.dismiss();
+      
   }
 
   newResponsavel() {
@@ -97,6 +99,16 @@ export class ResponsaveisPage implements OnInit {
     this.responsavelService.responsavelPaciente = responsavelPaciente;
     this.router.navigate(['responsavel']);
   }
+
+  async presentToast(error: string) {
+    const toast = await this.toastController.create({
+      message: error,
+      duration: 2000,
+      position: "middle"
+    });
+    toast.present();
+  }
+ 
 
 
 }

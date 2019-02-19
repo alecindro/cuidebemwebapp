@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NavParams, ModalController, AlertController } from '@ionic/angular';
+import { NavParams, ModalController, AlertController, ToastController } from '@ionic/angular';
 import { Evento } from '../models/evento';
 import { EventoRotina } from '../models/eventorotina';
 import { AuthServerProvider } from '../services/auth-jwt.service';
@@ -20,14 +20,17 @@ export class EventoModalPage implements OnInit {
   subgrupos: any;
   grupoEventos: string[];
   editable:boolean = false;
+  deletable:boolean = false;
 
   constructor(private navParams: NavParams,
     private modalController: ModalController,
     private authServerProvider: AuthServerProvider,
     private alertController: AlertController,
-    private eventoService: EventoService) { 
+    private eventoService: EventoService,
+    private toastController: ToastController) { 
       this.evento = this.navParams.get('evento');
       this.editable = this.navParams.get('editable');
+      this.deletable = this.navParams.get('deletable');
       
       let _data = new Date();
       if(this.evento.idevento){
@@ -85,17 +88,17 @@ export class EventoModalPage implements OnInit {
           role: 'cancel',
           cssClass: 'secondary',
           handler: (blah) => {
-            console.log('Confirm Cancel: blah');
+            
           }
         }, {
           text: 'Confimar',
           handler: () => {
             this.eventoService.delete(this.evento).subscribe(res => {
-              this.modalController.dismiss();
+              this.modalController.dismiss("Evento excluído com sucesso.");
             }, err => {
-              console.log(err);
+              this.presentToast(err.error);
             });
-            console.log('Confirm Okay');
+           
           }
         }
       ]
@@ -120,9 +123,9 @@ export class EventoModalPage implements OnInit {
     this.evento.dataregistro = _data;
     this.evento.usuario = this.authServerProvider.usuario; 
     this.eventoService.save(this.evento).subscribe(res=>{
-      this.modalController.dismiss();
+      this.modalController.dismiss("Evento registrado com sucesso.");
     }, err =>{
-        console.log(err.erro);
+        this.presentToast(err.error);
     })
   }
 
@@ -132,10 +135,18 @@ export class EventoModalPage implements OnInit {
     this.evento.dataregistro = _data;
     this.evento.usuario = this.authServerProvider.usuario; 
     this.eventoService.update(this.evento).subscribe(res=>{
-      this.modalController.dismiss();
+      this.modalController.dismiss("Evento atualizado com sucesso.");
     }, err =>{
-        console.log(err.erro);
+      this.presentToast(err.error);
     })
+  }
+
+  async presentToast(message:string) {
+    const toast = await this.toastController.create({
+      message: message,
+      duration: 2000
+    });
+    toast.present();
   }
 
 }

@@ -188,9 +188,7 @@ export class AuthServerProvider {
     if(authorities[i] === 'ROLE_ANONYMOUS'){
       return true;
     }
-    console.log("Roles:" + this.roles);
-    console.log("Authorities "+ authorities[i]);
-  if(this.roles){
+   if(this.roles){
     if (this.roles.includes(authorities[i])) {
           return true;
       }

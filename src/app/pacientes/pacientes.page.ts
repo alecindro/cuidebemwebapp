@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { PacienteDTO } from '../models/pacienteDTO';
 import { PacientedtoService } from '../services/pacientedto-service';
-import { LoadingController } from '@ionic/angular';
+import { LoadingController, ToastController } from '@ionic/angular';
 import { Router } from '@angular/router';
 
 @Component({
@@ -17,7 +17,8 @@ export class PacientesPage implements OnInit {
 
   constructor(private loadingController: LoadingController, 
     private pacientedtoService: PacientedtoService, 
-    private router: Router
+    private router: Router,
+    private toastController: ToastController
     ) { }
 
   ngOnInit() {
@@ -46,8 +47,8 @@ export class PacientesPage implements OnInit {
       this.pacienteDTOS = this.filteredList;
       loading.dismiss();
     }, err => {
-      console.log(err);
       loading.dismiss();
+      this.presentToast(err.error);
     });
   }
 
@@ -78,5 +79,11 @@ export class PacientesPage implements OnInit {
   showSearch(){
     this.enableSearch = !this.enableSearch;
   }
-
+  async presentToast(message:string) {
+    const toast = await this.toastController.create({
+      message: message,
+      duration: 2000
+    });
+    toast.present();
+  }
 }

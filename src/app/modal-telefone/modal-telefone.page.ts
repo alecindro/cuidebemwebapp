@@ -18,7 +18,6 @@ export class ModalTelefonePage implements OnInit {
 
   ngOnInit() {
     this.telefone = this.navParams.get('telefone');
-    console.log("Modal tel:" + JSON.stringify(this.telefone));
   }
 
   async closeModal(telefone: Telefone){

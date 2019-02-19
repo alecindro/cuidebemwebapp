@@ -10,8 +10,8 @@ export class TimelineService{
 
     constructor(private api: Api) { }
 
-    get(idpaciente:number): Observable<HttpResponse<any>>{
-        let params = {'idpaciente' : idpaciente};        
+    get(idpaciente:number, page:number): Observable<HttpResponse<any>>{
+        let params = {'idpaciente' : idpaciente, 'page' : page};        
         return this.api.get('api/timelines',params);        
     }
 }

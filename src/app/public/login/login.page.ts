@@ -25,7 +25,6 @@ export class LoginPage implements OnInit {
       this.user = {};
       this.menuCtrl.enable(true);
     },(err) => {
-      console.log(err.error);
       let error = err.error;
       if(err.error.type === "error"){
         error = "Não é possível acessar o sistema. Sistema em manutenção."
