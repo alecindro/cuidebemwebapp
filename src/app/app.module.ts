@@ -23,6 +23,8 @@ import { PhotoModalPageModule } from './photo-modal/photo-modal.module';
 import { EventoModalPageModule } from './evento-modal/evento-modal.module';
 import { SharedModule } from './shared/shared.module';
 import { CheckinPageModule } from './checkin/checkin.module';
+import { AgendaDefPageModule } from './agendadef/agendadef.module';
+import { IconEventPipe } from './shared/icon-event.pipe';
 
 
 export function jwtOptionsFactory(storage: Storage) {
@@ -46,6 +48,7 @@ export function jwtOptionsFactory(storage: Storage) {
     PhotoModalPageModule,
     EventoModalPageModule,
     CheckinPageModule,
+    AgendaDefPageModule
     ],
   providers: [
     Camera,

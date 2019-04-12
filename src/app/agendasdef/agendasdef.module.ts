@@ -5,16 +5,15 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
 
-import { EventosPage } from './eventos.page';
+import { AgendasDefPage } from './agendasdef.page';
 import { IconEventPipe } from '../shared/icon-event.pipe';
-import { MemoPageModule } from '../memo/memo.module';
+import { AgendaDefPageModule } from '../agendadef/agendadef.module';
 import { SharedModule } from '../shared/shared.module';
-
 
 const routes: Routes = [
   {
     path: '',
-    component: EventosPage
+    component: AgendasDefPage
   }
 ];
 
@@ -23,10 +22,9 @@ const routes: Routes = [
     CommonModule,
     FormsModule,
     IonicModule,
-    MemoPageModule,
     SharedModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [EventosPage]
+  declarations: [AgendasDefPage]
 })
-export class EventosPageModule {}
+export class AgendasDefPageModule {}

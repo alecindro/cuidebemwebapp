@@ -1,0 +1,92 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>Agendas</ion-title>
+    <ion-buttons slot="end">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-grid no-padding fixed>
+    <ion-row>
+      <ion-col size="12">
+        <ion-item>
+          <ion-select
+            [interfaceOptions]="customAlertOptions"
+            interface="alert"
+            placeholder="Selecione o Paciente"
+            [(ngModel)]="paciente"
+            (ionChange)="changePaciente()"
+          >
+            <ion-select-option
+              *ngFor="let pacientedto of pacienteDTOS"
+              [value]="pacientedto.paciente"
+              >{{ pacientedto.paciente.nome }}</ion-select-option
+            >
+          </ion-select>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <div *ngIf="selectedPaciente">
+    <ion-grid no-padding fixed>
+        <ion-row *ngIf="agendadefs.length == 0">
+            <ion-col size="12">
+              <div>
+                <ion-label>Não existe agendas cadastradas</ion-label>
+              </div>
+            </ion-col>
+          </ion-row>
+    </ion-grid>
+
+
+  </div>
+  <ion-grid no-padding fixed>
+    <ion-row *ngFor="let agendadef of agendadefs" (click)="edit(agendadef)" [class]="agendadef.enabled ? 'enabled' : 'disabled'">
+      <ion-col size="2">
+            <div>
+                <ion-note float-left>{{agendadef.horario}}</ion-note>
+              </div>
+      </ion-col>
+      <ion-col size="8">
+        <div>
+          <ion-label>
+            <h2>{{ agendadef.grupoevento }}</h2>
+            <div text-justify class="evento-content">
+              <h3>{{agendadef.subgrupoevento}}</h3>
+              </div>
+            <div text-justify class="evento-content">
+            <ion-label>Início: {{agendadef.datainicio | date:'dd/MM/yyyy' }}</ion-label>
+            </div>
+            <div text-justify class="evento-content">
+            <ion-label>Término: {{agendadef.datafim | date:'dd/MM/yyyy' }}</ion-label>
+            </div>
+            
+          </ion-label>
+        </div>
+      </ion-col>
+      <ion-col size="2">
+        <div>
+          <ion-icon
+          size="large"
+          [class]="agendadef.enabled ? 'evento-icon' : 'agenda-icon'"
+          [name]="agendadef.grupoevento | iconEvent"
+        ></ion-icon></div>
+      </ion-col>
+      <hr>
+    </ion-row>
+  </ion-grid>
+  <div *ngIf="selectedPaciente">
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button (click)=" newAgenda()">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</div>
+
+ </ion-content>

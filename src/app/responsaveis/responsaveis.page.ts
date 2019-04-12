@@ -25,7 +25,7 @@ export class ResponsaveisPage implements OnInit {
     private responsavelService: ResponsavelService,
     private responsavelPacienteService: ResponsavelPacienteService,
     private router: Router,
-    public toastController: ToastController
+    private toastController: ToastController
   ) { }
 
   ngOnInit() {

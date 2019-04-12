@@ -80,7 +80,8 @@ export class EventosPage implements OnInit {
       component: EventoModalPage,
       componentProps: {
         evento: evento,
-        editable: editable
+        editable: editable,
+        deletable: editable
       }
     });
     await modalEvento.present();
@@ -93,6 +94,24 @@ export class EventosPage implements OnInit {
   }
 
   private async loadTimeline() {
+    const loading = await this.loadingController.create({
+      message: 'Carregando ...'
+    });
+    await loading.present();
+    this.page = 0;
+    this.timelineService.get(this.pacientedto.paciente.idpaciente,0).subscribe(
+      res => {
+        this.timelines  = res.body;
+        loading.dismiss();
+      },
+      err => {
+        this.presentToast(err.error);
+        loading.dismiss();
+      }
+    );
+  }
+
+  private async moreData() {
     const loading = await this.loadingController.create({
       message: 'Carregando ...'
     });
@@ -210,7 +229,7 @@ export class EventosPage implements OnInit {
 
   loadData(event) {
     this.page = this.page +1;
-    this.loadTimeline().then( res =>{  
+    this.moreData().then( res =>{  
       event.target.complete();
       if(this.disableLoad){
         event.target.disabled = true;

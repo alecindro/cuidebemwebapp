@@ -171,12 +171,9 @@
 
         <div class="item item-divider evento-footer">
           <div text-center color="light">
-            <ion-datetime
-              display-format="DD MMM YYYY HH:ss"
-              readonly
-              [value]="timeline.timelineData.dataregistro"
-            >
-            </ion-datetime>
+            
+{{timeline.timelineData.dataregistro | date:"dd/MM/yyyy HH:ss"}}
+            
           </div>
         </div>
       </ion-card>
@@ -211,21 +208,7 @@
         </ion-card-header>
         <div class="item item-divider evento-footer">
           <div text-center color="light">
-            <ion-datetime
-              *ngIf="!timeline.timelineData.dataalteracao"
-              display-format="DD MMM YYYY HH:ss"
-              readonly
-              [value]="timeline.timelineData.dataregistro"
-            >
-            </ion-datetime>
-
-            <ion-datetime
-              *ngIf="timeline.timelineData.dataalteracao"
-              display-format="DD MMM YYYY HH:ss"
-              readonly
-              [value]="timeline.timelineData.dataalteracao"
-            >
-            </ion-datetime>
+              {{timeline.timelineData.dataregistro | date:"dd/MM/yyyy HH:ss"}}
           </div>
         </div>
       </ion-card>
@@ -267,12 +250,7 @@
         </ion-card-content>
         <div class="item item-divider evento-footer">
           <div text-center color="light">
-            <ion-datetime
-              display-format="DD MMM YYYY HH:ss"
-              readonly
-              [value]="timeline.timelineData.dataregistro"
-            >
-            </ion-datetime>
+              {{timeline.timelineData.dataregistro | date:"dd/MM/yyyy HH:ss"}}
           </div>
         </div>
       </ion-card>

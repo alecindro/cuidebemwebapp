@@ -57,7 +57,9 @@ export class AppComponent implements OnInit {
       this.authServerProvider.usuarioReplay.subscribe(user =>{
       if(user){
         this.usuario = user;
+        if(this.usuario.usuarioPhoto){
       this.photo =this.usuario.usuarioPhoto.photo;
+        }
       }
       })
       

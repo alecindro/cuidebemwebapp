@@ -93,7 +93,7 @@ export class MemoPage implements OnInit {
           text: 'Confimar',
           handler: () => {
             this.memorandoService.delete(this.memorando.idmemorando).subscribe(res => {
-              this.modalController.dismiss();
+              this.modalController.dismiss("Memorando excluído com sucesso.");
             }, err => {
               this.presentToast(err.error);
             });

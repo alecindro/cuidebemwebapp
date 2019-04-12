@@ -1,5 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { EventoRotina } from './models/eventorotina';
+import { EventoRotina } from '../models/eventorotina';
+
 
 @Pipe({
   name: 'iconEvent'

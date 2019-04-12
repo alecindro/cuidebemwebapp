@@ -1,0 +1,186 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-button (click)="fechar()">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Evento</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="delete()">
+        <ion-icon slot="icon-only" name="trash"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <form (ngSubmit)="salvar()" novalidate #eventoaddForm="ngForm">
+    <ion-grid>
+      <ion-row align-items-center>
+        <ion-col>
+          <ion-item>
+            <ion-label position="floating" class="required"
+              >Data de Início</ion-label
+            >
+            <ion-datetime min="{{min}}"
+              display-format="DD/MM/YYYY"
+              [(ngModel)]="agendadef.datainicio"
+              #name="ngModel"
+              name="dataInicio"
+            ></ion-datetime>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row align-items-center>
+        <ion-col>
+          <ion-item>
+            <ion-label position="floating" class="required"
+              >Data de Término</ion-label
+            >
+            <ion-datetime min="{{min}}"
+              display-format="DD/MM/YYYY"
+              [(ngModel)]="agendadef.datafim"
+              #name="ngModel"
+              name="dataFim"
+            ></ion-datetime>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row align-items-center>
+        <ion-col>
+          <ion-item>
+            <ion-label position="floating" class="required">Horário:</ion-label>
+            <ion-datetime 
+              display-format="HH:mm"
+              pickerFormat="HH:mmZ"
+              [(ngModel)]="agendadef.horario"
+              #name="ngModel"
+              name="datahora"
+              required
+            ></ion-datetime>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+
+      <ion-row align-items-center>
+        <ion-col>
+          <ion-item>
+            <ion-label position="floating" class="required"
+              >Tipo de Evento:</ion-label
+            >
+            <ion-select
+              [(ngModel)]="agendadef.grupoevento"
+              interface="popover"
+              (ionChange)="selectedGrupo(agendadef.grupoevento)"
+              required
+              name="grupoevento"
+            >
+              <ion-select-option
+                *ngFor="let grupoevento of grupoEventos"
+                [value]="grupoevento"
+                >{{ grupoevento }}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row *ngIf="subgrupos" align-items-center>
+        <ion-col>
+          <ion-item>
+            <ion-label position="floating" class="required">Rotina:</ion-label>
+            <ion-select
+              [(ngModel)]="agendadef.subgrupoevento"
+              interface="popover"
+              (ionChange)="selectedSubgrupo(agendadef.subgrupoevento)"
+              required
+              #subgrupoevento="ngModel"
+              name="subgrupoevento"
+            >
+              <ion-select-option
+                *ngFor="let subgrupoevento of subgrupos"
+                [value]="descricao"
+                >{{ subgrupoevento.rotina }}</ion-select-option
+              >
+            </ion-select>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+    
+
+      <ion-row *ngIf="grupoSelected">
+          <ion-col>
+            <ion-item>
+              <ion-label position="floating">Repetir a cada hora:</ion-label>
+              <ion-checkbox slot="end"    #name="ngModel"
+              name="repetirHoras" (ionChange)="changeHoras()"
+                [(ngModel)]="repetirHoras"
+                color="secondary"
+              >
+              </ion-checkbox>
+            </ion-item>
+            <ion-item *ngIf="grupoSelected">
+              <ion-label position="floating">Dias Alternados:</ion-label>
+              <ion-checkbox slot="end"    #name="ngModel"
+              name="diaspersonalizado" (ionChange)="changeDias()"
+                [(ngModel)]="agendadef.diaspersonalizado"
+                color="secondary"
+              >
+              </ion-checkbox>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+      
+      <ion-row *ngIf="repetirHoras">
+        <ion-col>
+          <ion-item>
+            <ion-label position="floating">Repetir a cada (hora):</ion-label>
+            <ion-input
+              type="text"
+              [(ngModel)]="agendadef.repetirHoras"
+              clearInput
+              #name="ngModel"
+              name="inputHoras"
+            ></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+
+      <ion-row *ngIf="agendadef.diaspersonalizado">
+        <ion-col>
+          <ion-item-group>
+            <ion-item-divider color="primary">
+              <ion-title>Dias da Semana</ion-title>
+            </ion-item-divider>
+            <ion-item *ngFor="let entry of dias">
+              <ion-label>{{entry.descricao}}</ion-label>
+              <ion-checkbox slot="end" [(ngModel)]="entry.selected" name="{{entry.descricao}}"></ion-checkbox>
+            </ion-item>
+          </ion-item-group>
+        </ion-col>
+      </ion-row>
+      <ion-row *ngIf="grupoSelected">
+          <ion-col>
+            <ion-item>
+              <ion-label position="floating">Observação</ion-label>
+              <ion-textarea type="text" [(ngModel)]="agendadef.observacao" clearInput #obs="ngModel" name="obs"></ion-textarea>
+
+    </ion-item>
+    </ion-col>
+      </ion-row>
+      <ion-row>
+
+        <ion-col size="12">
+          <ion-button
+            [disabled]="!eventoaddForm.form.valid"
+            type="submit"
+            color="primary"
+            strong="true"
+            expand="block"
+            >Salvar</ion-button
+          >
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </form>
+</ion-content>

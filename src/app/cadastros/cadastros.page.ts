@@ -20,7 +20,7 @@ export class CadastrosPage implements OnInit {
     this.route.navigate(['responsaveis']);
   }
   agendas(){
-    this.route.navigate(['agendas']);
+    this.route.navigate(['agendadefs']);
   }
   usuarios(){
     this.route.navigate(['usuarios']);

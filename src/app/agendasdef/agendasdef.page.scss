@@ -1,0 +1,19 @@
+.in-item {
+    position: static;
+    max-width: 100%; 
+}
+.disabled{
+background-color:var(--ion-color-danger);
+border-bottom-style: double;
+-webkit-border-radius: 5px;
+-moz-border-radius: 5px;
+border-radius: 5px;
+}
+
+.enabled{
+    background-color:var(--ion-color-light);
+    border-bottom-style: double;
+    -webkit-border-radius: 5px;
+-moz-border-radius: 5px;
+border-radius: 5px;
+    }

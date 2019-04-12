@@ -36,7 +36,7 @@ export class EventoRotina {
             template: "/app/evento/traqueal.html"
         },
         {
-            rotina: "Frequência Cardíaca",
+            rotina: "Nebulização",
             opcoes: ["Oral", "Nasal"],
             quantidade: ["Pouco", "Normal", "Grande"],
             aspecto: ["Seroide", "Mucosa", "Purulenta"],
@@ -268,7 +268,9 @@ export class EventoRotina {
     getDescricaoEvento(): string[] {
         return this.eventos.map(this.mapDescricao);
     }
-
+    getDescricaoEventoDefault(): string[] {
+        return this.eventos.map(this.mapDescricao).slice(0,-2);
+    }
     getIcon(descricao:string):string{
         let pos = this.eventos.map(_eventos=>{return _eventos.descricao}).indexOf(descricao);
         return this.eventos[pos].icon;
