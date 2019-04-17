@@ -24,7 +24,8 @@ import { EventoModalPageModule } from './evento-modal/evento-modal.module';
 import { SharedModule } from './shared/shared.module';
 import { CheckinPageModule } from './checkin/checkin.module';
 import { AgendaDefPageModule } from './agendadef/agendadef.module';
-import { IconEventPipe } from './shared/icon-event.pipe';
+import { AgendatabmodalPageModule } from './agendatabmodal/agendatabmodal.module';
+
 
 
 export function jwtOptionsFactory(storage: Storage) {
@@ -46,6 +47,7 @@ export function jwtOptionsFactory(storage: Storage) {
     HttpClientModule,
     MemoPageModule,
     PhotoModalPageModule,
+    AgendatabmodalPageModule,
     EventoModalPageModule,
     CheckinPageModule,
     AgendaDefPageModule

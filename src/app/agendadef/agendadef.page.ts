@@ -97,7 +97,7 @@ export class AgendaDefPage implements OnInit {
       this.diaSemana.result(this.agendadef,this.dias);
       let _datainicio = new Date(this.agendadef.datainicio);
       _datainicio.setHours(0);
-      let _datafim = new Date(this.agendadef.datainicio);
+      let _datafim = new Date(this.agendadef.datafim);
       _datafim.setHours(0);
       this.agendadef.datainicio = _datainicio.toISOString();
       this.agendadef.datafim = _datafim.toISOString();

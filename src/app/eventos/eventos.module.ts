@@ -6,7 +6,6 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { EventosPage } from './eventos.page';
-import { IconEventPipe } from '../shared/icon-event.pipe';
 import { MemoPageModule } from '../memo/memo.module';
 import { SharedModule } from '../shared/shared.module';
 

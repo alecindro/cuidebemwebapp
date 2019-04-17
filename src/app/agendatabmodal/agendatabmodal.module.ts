@@ -5,13 +5,12 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
 
-import { AgendatabPage } from './agendatab.page';
-import { SharedModule } from '../shared/shared.module';
+import { AgendatabmodalPage } from './agendatabmodal.page';
 
 const routes: Routes = [
   {
     path: '',
-    component: AgendatabPage
+    component: AgendatabmodalPage
   }
 ];
 
@@ -20,9 +19,8 @@ const routes: Routes = [
     CommonModule,
     FormsModule,
     IonicModule,
-    SharedModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [AgendatabPage]
+  declarations: [AgendatabmodalPage]
 })
-export class AgendatabPageModule {}
+export class AgendatabmodalPageModule {}

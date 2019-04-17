@@ -1,5 +1,6 @@
 import { Usuario } from "./usuario";
 import { Paciente } from "./paciente";
+import { Agenda } from "./agenda";
 
 export class Evento{
     idevento: number;
@@ -19,5 +20,6 @@ export class Evento{
     aspecto: string;
     quantidade: string;
     usuario: Usuario;
-	paciente:  Paciente;
+    paciente:  Paciente;
+    agenda: Agenda;
 }

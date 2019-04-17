@@ -32,7 +32,8 @@ const routes: Routes = [
   { path: 'memo', canActivate: [AuthGuardService],loadChildren: './memo/memo.module#MemoPageModule',runGuardsAndResolvers: 'always' },
   { path: 'photo-modal', canActivate: [AuthGuardService],loadChildren: './photo-modal/photo-modal.module#PhotoModalPageModule' ,runGuardsAndResolvers: 'always'},
   { path: 'evento-modal', canActivate: [AuthGuardService],loadChildren: './evento-modal/evento-modal.module#EventoModalPageModule' ,runGuardsAndResolvers: 'always'},
-  { path: 'agendadefs', canActivate: [AuthGuardService],loadChildren: './agendasdef/agendasdef.module#AgendasDefPageModule',runGuardsAndResolvers: 'always' }
+  { path: 'agendadefs', canActivate: [AuthGuardService],loadChildren: './agendasdef/agendasdef.module#AgendasDefPageModule',runGuardsAndResolvers: 'always' },
+  { path: 'agendatabmodal', canActivate: [AuthGuardService], loadChildren: './agendatabmodal/agendatabmodal.module#AgendatabmodalPageModule',runGuardsAndResolvers: 'always' }
  ];
 
 @NgModule({

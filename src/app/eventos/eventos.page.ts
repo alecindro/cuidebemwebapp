@@ -21,7 +21,7 @@ import { EventoRotina } from "../models/eventorotina";
   templateUrl: "./eventos.page.html",
   styleUrls: ["./eventos.page.scss"]
 })
-export class EventosPage implements OnInit {
+export class EventosPage {
   timelines: Array<Timeline> = new Array<Timeline>();
   pacientedto: PacienteDTO;
   eventoRotina: EventoRotina = new EventoRotina();
@@ -42,7 +42,7 @@ export class EventosPage implements OnInit {
     private toastController: ToastController
   ) {}
 
-  ngOnInit() {
+  ionViewWillEnter() {
     this.grupoEventos = this.eventoRotina.getDescricaoEvento();
     this.pacientedto = this.pacientedtoService.pacienteDTO;
     this.loadTimeline();
